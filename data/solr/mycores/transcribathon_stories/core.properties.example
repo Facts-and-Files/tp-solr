@@ -1,0 +1,10 @@
+name=Stories
+config=solrconfig.xml
+schema=schema.xml
+dataDir=data
+
+dbtype=JdbcDataSource
+dbdriver=com.mysql.jdbc.Driver
+dburl=jdbc:mysql://localhost:3306/databasename?allowMultiQueries=true&serverTimezone=CET
+dbuser=user
+dbpass=password
