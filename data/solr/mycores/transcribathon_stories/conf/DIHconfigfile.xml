@@ -1,0 +1,173 @@
+<dataConfig>
+	<dataSource />
+  <document> 
+    <entity name="Stories" transformer="RegexTransformer" query="
+SELECT 
+	s.StoryId as StoryId,
+	s.ProjectId as ProjectId,
+	d.Name as Dataset,
+	s.`edm:country` as edmCountry,
+	s.`edm:provider` as edmProvider,
+	l.NameEnglish as edmLanguage,
+	s.`dc:language` as dcLanguage,
+	c.Name as CompletionStatus,
+	s.`dc:title` as dcTitle,
+	s.`dc:description` as dcDescription,
+	img.ImageLink as PreviewImageLink,
+	s.ProjectId as ProjectId,
+	categories.value as Categories,
+	notStarted.NotStartedAmount as NotStartedAmount,
+	edit.EditAmount as EditAmount,
+	review.ReviewAmount as ReviewAmount,
+	completed.CompletedAmount as CompletedAmount
+FROM Story s
+	LEFT JOIN Language l ON s.`edm:Language` = l.Code
+	LEFT JOIN Dataset d ON s.DatasetId = d.DatasetId
+    LEFT JOIN CompletionStatus c ON s.CompletionStatusId = c.CompletionStatusId
+	JOIN story_first_item_view img ON img.StoryId = s.StoryId  
+	LEFT JOIN (
+		SELECT	i.StoryId, group_concat(DISTINCT(p.Value) SEPARATOR '#~#') as Value
+		FROM Property p
+			JOIN PropertyType pt ON p.PropertyTypeId = pt.PropertyTypeId
+			JOIN ItemProperty ip ON ip.PropertyId = p.PropertyId
+			JOIN Item i ON i.ItemId = ip.ItemId
+		WHERE 
+			i.StoryId = '150613' AND
+			pt.Name = 'Category'
+		GROUP BY StoryId
+	) categories ON s.StoryId = categories.StoryId
+	LEFT JOIN (
+		SELECT 	i.StoryId, count(*) as NotStartedAmount
+        FROM Item i
+			JOIN CompletionStatus c ON c.CompletionStatusId = i.CompletionStatusId
+			WHERE 
+				i.StoryId = '150613' AND
+			    c.Name = 'Not Started'
+		GROUP BY StoryId
+	) notStarted ON notStarted.StoryId = s.StoryId
+	LEFT JOIN (
+		SELECT	i.StoryId, count(*) as EditAmount
+        FROM Item i
+			JOIN CompletionStatus c ON c.CompletionStatusId = i.CompletionStatusId
+        WHERE 
+			i.StoryId = '150613' AND
+			c.Name = 'Edit'
+		GROUP BY StoryId
+	) edit ON edit.StoryId = s.StoryId
+	LEFT JOIN ( 
+		SELECT i.StoryId, count(*) as ReviewAmount
+        FROM Item i
+			JOIN CompletionStatus c ON c.CompletionStatusId = i.CompletionStatusId
+        WHERE
+			i.StoryId = '150613' AND
+			c.Name = 'Review'
+		GROUP BY StoryId
+	) review ON review.StoryId = s.StoryId
+	LEFT JOIN (
+		SELECT i.StoryId, count(*) as CompletedAmount
+        FROM Item i
+			JOIN CompletionStatus c ON c.CompletionStatusId = i.CompletionStatusId
+        WHERE
+			i.StoryId = '150613'	AND
+			c.Name = 'Completed'
+		GROUP BY StoryId
+	) completed ON completed.StoryId = s.StoryId
+WHERE s.StoryId = '150613'	
+ORDER BY s.StoryId DESC;" 
+
+deltaImportQuery="
+SELECT 
+	s.StoryId as StoryId,
+	s.ProjectId as ProjectId,
+	d.Name as Dataset,
+	s.`edm:country` as edmCountry,
+	s.`edm:provider` as edmProvider,
+	l.NameEnglish as edmLanguage,
+	s.`dc:language` as dcLanguage,
+	c.Name as CompletionStatus,
+	s.`dc:title` as dcTitle,
+	s.`dc:description` as dcDescription,
+	img.ImageLink as PreviewImageLink,
+	s.ProjectId as ProjectId,
+	categories.value as Categories,
+	notStarted.NotStartedAmount as NotStartedAmount,
+	edit.EditAmount as EditAmount,
+	review.ReviewAmount as ReviewAmount,
+	completed.CompletedAmount as CompletedAmount
+FROM Story s
+	LEFT JOIN Language l ON s.`edm:Language` = l.Code
+	LEFT JOIN Dataset d ON s.DatasetId = d.DatasetId
+    LEFT JOIN CompletionStatus c ON s.CompletionStatusId = c.CompletionStatusId
+	JOIN story_first_item_view img ON img.StoryId = s.StoryId  
+	LEFT JOIN (
+		SELECT	i.StoryId, group_concat(DISTINCT(p.Value) SEPARATOR '#~#') as Value
+		FROM Property p
+			JOIN PropertyType pt ON p.PropertyTypeId = pt.PropertyTypeId
+			JOIN ItemProperty ip ON ip.PropertyId = p.PropertyId
+			JOIN Item i ON i.ItemId = ip.ItemId
+		WHERE 
+			i.StoryId = '${dih.delta.StoryId}' AND
+			pt.Name = 'Category'
+		GROUP BY StoryId
+	) categories ON s.StoryId = categories.StoryId
+	LEFT JOIN (
+		SELECT 	i.StoryId, count(*) as NotStartedAmount
+        FROM Item i
+			JOIN CompletionStatus c ON c.CompletionStatusId = i.CompletionStatusId
+			WHERE 
+				i.StoryId = '${dih.delta.StoryId}' AND
+			    c.Name = 'Not Started'
+		GROUP BY StoryId
+	) notStarted ON notStarted.StoryId = s.StoryId
+	LEFT JOIN (
+		SELECT	i.StoryId, count(*) as EditAmount
+        FROM Item i
+			JOIN CompletionStatus c ON c.CompletionStatusId = i.CompletionStatusId
+        WHERE 
+			i.StoryId = '${dih.delta.StoryId}' AND
+			c.Name = 'Edit'
+		GROUP BY StoryId
+	) edit ON edit.StoryId = s.StoryId
+	LEFT JOIN ( 
+		SELECT i.StoryId, count(*) as ReviewAmount
+        FROM Item i
+			JOIN CompletionStatus c ON c.CompletionStatusId = i.CompletionStatusId
+        WHERE
+			i.StoryId = '${dih.delta.StoryId}' AND
+			c.Name = 'Review'
+		GROUP BY StoryId
+	) review ON review.StoryId = s.StoryId
+	LEFT JOIN (
+		SELECT i.StoryId, count(*) as CompletedAmount
+        FROM Item i
+			JOIN CompletionStatus c ON c.CompletionStatusId = i.CompletionStatusId
+        WHERE
+			i.StoryId = '${dih.delta.StoryId}'	AND
+			c.Name = 'Completed'
+		GROUP BY StoryId
+	) completed ON completed.StoryId = s.StoryId
+WHERE s.StoryId = '${dih.delta.StoryId}'	
+ORDER BY s.StoryId DESC;" 
+
+deltaQuery="select StoryId from Story where LastUpdated > '${dih.last_index_time}'" pk="StoryId"> 
+      <field column="StoryId" name="StoryId" />      
+      <field column="ProjectId" name="ProjectId" />
+      <field column="Dataset" name="Dataset" />
+      <field column="edmCountry" name="edmCountry" />
+      <field column="edmProvider" name="edmProvider" />
+      <field column="edmLanguage" name="edmLanguage" />
+      <field column="dcLanguage" name="dcLanguage" />
+      <field column="CompletionStatus" name="CompletionStatus" />	
+      <field column="dcTitle" name="dcTitle" />
+      <field column="dcDescription" name="dcDescription" />
+      <field column="PreviewImageLink" name="PreviewImageLink" />
+      <field column="ProjectId" name="ProjectId" />
+      <field column="Categories" name="Categories" splitBy="#~#" />
+      <field column="NotStartedAmount" name="NotStartedAmount" />
+      <field column="EditAmount" name="EditAmount" />
+      <field column="ReviewAmount" name="ReviewAmount" />
+      <field column="CompletedAmount" name="CompletedAmount" />
+
+    </entity>
+  </document>
+</dataConfig>

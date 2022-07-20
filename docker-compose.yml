@@ -1,0 +1,17 @@
+version: '3'
+services:
+  solr:
+    image: solr:7.7.3
+    container_name: tp_solr
+    ports:
+      - "8983:8983"
+    volumes:
+      - ./data/solr:/opt/solr/server/solr
+    networks:
+      - tp_backend
+volumes:
+  data:
+
+networks:
+  tp_backend:
+    external: true
