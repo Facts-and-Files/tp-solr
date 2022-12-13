@@ -50,6 +50,7 @@
 			multiValued="false" stored="true" />
 		<field name="StoryID" type="string" indexed="true" required="true"
 			multiValued="false" stored="true" />
+		<field name="StoryTitle" type="text" indexed="true" stored="true" multiValued="false"/>   
 		<field name="ProjectId" type="int" indexed="true" stored="true" multiValued="false"/>
       	<field name="Timestamp" type="datetime" indexed="true" stored="true" multiValued="false"/>   
 		<field name="Title" type="text" indexed="true" stored="true" multiValued="false"/>   
@@ -94,6 +95,7 @@
 		<field name="Date" type="datetime" indexed="true" stored="false" multiValued="true"/>
 			
 		<!-- copy values to full text search field  -->
+		<copyField source="StoryTitle" dest="text" />
 		<copyField source="Title" dest="text" />
 		<copyField source="Description" dest="text" />
 		<copyField source="TranscriptionText" dest="text" />
