@@ -24,72 +24,73 @@
 		</analyzer>
 	</fieldType>
 
-		<field name="_version_" type="long" indexed="true" stored="true" multiValued="false" />
+	<field name="_version_" type="long" indexed="true" stored="true" multiValued="false" />
 
-		<!--  metadata  -->
-		<field name="ItemId" type="string" indexed="true" required="true" multiValued="false" stored="true" />
-		<field name="StoryI" type="string" indexed="true" required="true" multiValued="false" stored="true" />
-		<field name="StoryTitle" type="text" indexed="true" stored="true" multiValued="false"/>
-		<field name="ProjectId" type="int" indexed="true" stored="true" multiValued="false"/>
-    <field name="Timestamp" type="datetime" indexed="true" stored="true" multiValued="false"/>
-		<field name="Title" type="text" indexed="true" stored="true" multiValued="false"/>
-		<field name="Description" type="text" indexed="true" stored="true" multiValued="false"/>
-		<field name="PreviewImageLink" type="string" indexed="true" stored="true" multiValued="false"/>
-		<field name="TranscriptionText" type="text" indexed="true" stored="true" multiValued="false"/>
-		<field name="Languages" type="strings" indexed="true" stored="true" multiValued="true"/>
-		<field name="Categories" type="strings" indexed="true" stored="true" multiValued="true"/>
-		<field name="Keyword" type="text" indexed="true" stored="true" multiValued="true"/>
-		<field name="PlaceName" type="text" indexed="true" stored="true" multiValued="true"/>
-		<field name="WikidataPlaceName" type="text" indexed="true" stored="true" multiValued="true"/>
-		<field name="PlaceWikidataId" type="string" indexed="true" stored="true" multiValued="true"/>
-		<field name="GeoLocation" type="location" indexed="true" stored="true" multiValued="true"/>
-		<field name="Person" type="text" indexed="true" stored="true" multiValued="true"/>
-		<field name="StartDate" type="datetime" indexed="true" stored="true" multiValued="false"/>
-		<field name="EndDate" type="datetime" indexed="true" stored="true" multiValued="false"/>
+	<!--  metadata  -->
+	<field name="ItemId" type="string" indexed="true" required="true" multiValued="false" stored="true" />
+	<field name="StoryI" type="string" indexed="true" required="true" multiValued="false" stored="true" />
+	<field name="StoryTitle" type="text" indexed="true" stored="true" multiValued="false"/>
+	<field name="ProjectId" type="int" indexed="true" stored="true" multiValued="false"/>
+  <field name="Timestamp" type="datetime" indexed="true" stored="true" multiValued="false"/>
+	<field name="Title" type="text" indexed="true" stored="true" multiValued="false"/>
+	<field name="Description" type="text" indexed="true" stored="true" multiValued="false"/>
+	<field name="PreviewImageLink" type="string" indexed="true" stored="true" multiValued="false"/>
+	<field name="TranscriptionText" type="text" indexed="true" stored="true" multiValued="false"/>
+	<field name="Languages" type="strings" indexed="true" stored="true" multiValued="true"/>
+	<field name="Categories" type="strings" indexed="true" stored="true" multiValued="true"/>
+	<field name="Keyword" type="text" indexed="true" stored="true" multiValued="true"/>
+	<field name="PlaceName" type="text" indexed="true" stored="true" multiValued="true"/>
+	<field name="WikidataPlaceName" type="text" indexed="true" stored="true" multiValued="true"/>
+	<field name="PlaceWikidataId" type="string" indexed="true" stored="true" multiValued="true"/>
+	<field name="GeoLocation" type="location" indexed="true" stored="true" multiValued="true"/>
+	<field name="Person" type="text" indexed="true" stored="true" multiValued="true"/>
+	<field name="StartDate" type="datetime" indexed="true" stored="true" multiValued="false"/>
+	<field name="EndDate" type="datetime" indexed="true" stored="true" multiValued="false"/>
 
-		<!--  statuses  -->
-		<field name="CompletionStatus" type="string" indexed="true" stored="true" multiValued="false"/>
-		<field name="CompletionColorCode" type="string" indexed="true" stored="true" multiValued="false"/>
-		<field name="CompletionColorCodeGradient" type="string" indexed="true" stored="true" multiValued="false"/>
-		<field name="TranscriptionStatus" type="string" indexed="true" stored="true" multiValued="false"/>
-		<field name="TranscriptionColorCode" type="string" indexed="true" stored="true" multiValued="false"/>
-		<field name="TranscriptionColorCodeGradient" type="string" indexed="true" stored="true" multiValued="false"/>
-		<field name="DescriptionStatus" type="string" indexed="true" stored="true" multiValued="false"/>
-		<field name="DescriptionColorCode" type="string" indexed="true" stored="true" multiValued="false"/>
-		<field name="DescriptionColorCodeGradient" type="string" indexed="true" stored="true" multiValued="false"/>
-		<field name="LocationStatus" type="string" indexed="true" stored="true" multiValued="false"/>
-		<field name="LocationColorCode" type="string" indexed="true" stored="true" multiValued="false"/>
-		<field name="LocationColorCodeGradient" type="string" indexed="true" stored="true" multiValued="false"/>
-		<field name="TaggingStatus" type="string" indexed="true" stored="true" multiValued="false"/>
-		<field name="TaggingColorCode" type="string" indexed="true" stored="true" multiValued="false"/>
-		<field name="TaggingColorCodeGradient" type="string" indexed="true" stored="true" multiValued="false"/>
+	<!--  statuses  -->
+	<field name="CompletionStatus" type="string" indexed="true" stored="true" multiValued="false"/>
+	<field name="CompletionColorCode" type="string" indexed="true" stored="true" multiValued="false"/>
+	<field name="CompletionColorCodeGradient" type="string" indexed="true" stored="true" multiValued="false"/>
+	<field name="TranscriptionStatus" type="string" indexed="true" stored="true" multiValued="false"/>
+	<field name="TranscriptionColorCode" type="string" indexed="true" stored="true" multiValued="false"/>
+	<field name="TranscriptionColorCodeGradient" type="string" indexed="true" stored="true" multiValued="false"/>
+	<field name="DescriptionStatus" type="string" indexed="true" stored="true" multiValued="false"/>
+	<field name="DescriptionColorCode" type="string" indexed="true" stored="true" multiValued="false"/>
+	<field name="DescriptionColorCodeGradient" type="string" indexed="true" stored="true" multiValued="false"/>
+	<field name="LocationStatus" type="string" indexed="true" stored="true" multiValued="false"/>
+	<field name="LocationColorCode" type="string" indexed="true" stored="true" multiValued="false"/>
+	<field name="LocationColorCodeGradient" type="string" indexed="true" stored="true" multiValued="false"/>
+	<field name="TaggingStatus" type="string" indexed="true" stored="true" multiValued="false"/>
+	<field name="TaggingColorCode" type="string" indexed="true" stored="true" multiValued="false"/>
+	<field name="TaggingColorCodeGradient" type="string" indexed="true" stored="true" multiValued="false"/>
 
 
-		<!--  copy fields -->
-		<field name="text" type="text" indexed="true" stored="false" multiValued="true" />
-		<field name="Place" type="text" indexed="true" stored="false" multiValued="true" />
-		<field name="Date" type="datetime" indexed="true" stored="false" multiValued="true"/>
+	<!--  copy fields -->
+	<field name="text" type="text" indexed="true" stored="false" multiValued="true" />
+	<field name="Place" type="text" indexed="true" stored="false" multiValued="true" />
+	<field name="Date" type="datetime" indexed="true" stored="false" multiValued="true"/>
 
-		<!-- copy values to full text search field  -->
-		<copyField source="StoryTitle" dest="text" />
-		<copyField source="Title" dest="text" />
-		<copyField source="Description" dest="text" />
-		<copyField source="TranscriptionText" dest="text" />
-		<copyField source="Categories" dest="text" />
-		<copyField source="Keyword" dest="text" />
-		<copyField source="PlaceName" dest="text" />
-		<copyField source="WikidataPlaceName" dest="text" />
-		<copyField source="Person" dest="text" />
+	<!-- copy values to full text search field  -->
+	<copyField source="StoryTitle" dest="text" />
+	<copyField source="Title" dest="text" />
+	<copyField source="Description" dest="text" />
+	<copyField source="TranscriptionText" dest="text" />
+	<copyField source="Categories" dest="text" />
+	<copyField source="Keyword" dest="text" />
+	<copyField source="PlaceName" dest="text" />
+	<copyField source="WikidataPlaceName" dest="text" />
+	<copyField source="Person" dest="text" />
 
-		<!-- copy values to Place field  -->
-		<copyField source="PlaceName" dest="Place" />
-		<copyField source="WikidataPlaceName" dest="Place" />
+	<!-- copy values to Place field  -->
+	<copyField source="PlaceName" dest="Place" />
+	<copyField source="WikidataPlaceName" dest="Place" />
 
-		<!-- copy values to Date field  -->
-		<copyField source="StartDate" dest="Date" />
-		<copyField source="EndDate" dest="Date" />
+	<!-- copy values to Date field  -->
+	<copyField source="StartDate" dest="Date" />
+	<copyField source="EndDate" dest="Date" />
 
-		<!--  administrative information -->
-		<field name="IndexingTimestamp" type="datetime" indexed="true" stored="true" default="NOW" multiValued="false" />
-		<uniqueKey>ItemId</uniqueKey>
+	<!--  administrative information -->
+	<field name="IndexingTimestamp" type="datetime" indexed="true" stored="true" default="NOW" multiValued="false" />
+	<uniqueKey>ItemId</uniqueKey>
+
 </schema>
