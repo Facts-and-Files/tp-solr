@@ -26,12 +26,12 @@
 
 	<field name="_version_" type="long" indexed="true" stored="true" multiValued="false" />
 
-	<!--  metadata  -->
+	<!-- metadata -->
 	<field name="ItemId" type="string" indexed="true" required="true" multiValued="false" stored="true" />
-	<field name="StoryI" type="string" indexed="true" required="true" multiValued="false" stored="true" />
+	<field name="StoryId" type="string" indexed="true" required="true" multiValued="false" stored="true" />
 	<field name="StoryTitle" type="text" indexed="true" stored="true" multiValued="false"/>
 	<field name="ProjectId" type="int" indexed="true" stored="true" multiValued="false"/>
-  <field name="Timestamp" type="datetime" indexed="true" stored="true" multiValued="false"/>
+	<field name="Timestamp" type="datetime" indexed="true" stored="true" multiValued="false"/>
 	<field name="Title" type="text" indexed="true" stored="true" multiValued="false"/>
 	<field name="Description" type="text" indexed="true" stored="true" multiValued="false"/>
 	<field name="PreviewImageLink" type="string" indexed="true" stored="true" multiValued="false"/>
@@ -47,7 +47,7 @@
 	<field name="StartDate" type="datetime" indexed="true" stored="true" multiValued="false"/>
 	<field name="EndDate" type="datetime" indexed="true" stored="true" multiValued="false"/>
 
-	<!--  statuses  -->
+	<!-- statuses -->
 	<field name="CompletionStatus" type="string" indexed="true" stored="true" multiValued="false"/>
 	<field name="CompletionColorCode" type="string" indexed="true" stored="true" multiValued="false"/>
 	<field name="CompletionColorCodeGradient" type="string" indexed="true" stored="true" multiValued="false"/>
@@ -65,12 +65,12 @@
 	<field name="TaggingColorCodeGradient" type="string" indexed="true" stored="true" multiValued="false"/>
 
 
-	<!--  copy fields -->
+	<!-- copy fields -->
 	<field name="text" type="text" indexed="true" stored="false" multiValued="true" />
 	<field name="Place" type="text" indexed="true" stored="false" multiValued="true" />
 	<field name="Date" type="datetime" indexed="true" stored="false" multiValued="true"/>
 
-	<!-- copy values to full text search field  -->
+	<!-- copy values to full text search field -->
 	<copyField source="StoryTitle" dest="text" />
 	<copyField source="Title" dest="text" />
 	<copyField source="Description" dest="text" />
@@ -81,15 +81,15 @@
 	<copyField source="WikidataPlaceName" dest="text" />
 	<copyField source="Person" dest="text" />
 
-	<!-- copy values to Place field  -->
+	<!-- copy values to Place field -->
 	<copyField source="PlaceName" dest="Place" />
 	<copyField source="WikidataPlaceName" dest="Place" />
 
-	<!-- copy values to Date field  -->
+	<!-- copy values to Date field -->
 	<copyField source="StartDate" dest="Date" />
 	<copyField source="EndDate" dest="Date" />
 
-	<!--  administrative information -->
+	<!-- administrative information -->
 	<field name="IndexingTimestamp" type="datetime" indexed="true" stored="true" default="NOW" multiValued="false" />
 	<uniqueKey>ItemId</uniqueKey>
 
