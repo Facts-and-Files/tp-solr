@@ -12,7 +12,7 @@
 	<fieldType name="double" class="solr.DoublePointField" />
 	<fieldType name="datetime" class="solr.TrieDateField" sortMissingLast="true"/>
 	<fieldType name="location" class="solr.LatLonPointSpatialField" docValues="true" />
-  <fieldType name="text_general" class="solr.TextField" />
+	<fieldType name="text_general" class="solr.TextField" />
 
 	<fieldType name="text" class="solr.TextField" positionIncrementGap="100">
 		<analyzer>
@@ -28,7 +28,7 @@
 
 		<!--  metadata  -->
 		<field name="ItemId" type="string" indexed="true" required="true" multiValued="false" stored="true" />
-		<field name="StoryId" type="string" indexed="true" required="true" multiValued="false" stored="true" />
+		<field name="StoryI" type="string" indexed="true" required="true" multiValued="false" stored="true" />
 		<field name="StoryTitle" type="text" indexed="true" stored="true" multiValued="false"/>
 		<field name="ProjectId" type="int" indexed="true" stored="true" multiValued="false"/>
     <field name="Timestamp" type="datetime" indexed="true" stored="true" multiValued="false"/>
