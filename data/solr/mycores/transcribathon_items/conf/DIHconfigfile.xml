@@ -8,7 +8,7 @@
 				SELECT
 					i.ItemId AS ItemId,
 					DATE_FORMAT(i.DateStart, '%Y-%m-%dT00:00:00Z') AS StartDate,
-					DATE_FORMAT(i.DateEnd, '%Y-%m-%dT23:59:99Z') AS EndDate,
+					DATE_FORMAT(i.DateEnd, '%Y-%m-%dT23:59:59Z') AS EndDate,
 					s.StoryId AS StoryId,
 					s.ProjectId AS ProjectId,
 					s.`dc:title` AS StoryTitle,
@@ -143,7 +143,7 @@
 				SELECT
 					i.ItemId AS ItemId,
 					DATE_FORMAT(i.DateStart, '%Y-%m-%dT00:00:00Z') AS StartDate,
-					DATE_FORMAT(i.DateEnd, '%Y-%m-%dT23:59:99Z') AS EndDate,
+					DATE_FORMAT(i.DateEnd, '%Y-%m-%dT23:59:59Z') AS EndDate,
 					s.StoryId AS StoryId,
 					s.ProjectId AS ProjectId,
 					s.`dc:title` AS StoryTitle,
