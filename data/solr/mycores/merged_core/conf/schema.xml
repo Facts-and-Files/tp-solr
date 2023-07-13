@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<schema name="merged_core" version="1.6">
+  <fields>
+
+    <!-- Standard fields for both Stories and Items -->
+    <field name="docId" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="_version_" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="StoryId" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="StartDate" type="date_field" indexed="true" stored="true" docValues="true" multiValued="false" />
+    <field name="EndDate" type="date_field" indexed="true" stored="true" docValues="true" multiValued="false" />
+    <field name="Timestamp" type="date_field" indexed="true" stored="true" docValues="true" multiValued="false" />
+    <field name="ProjectId" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="StoryTitle" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="Title" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="Description" type="text_field" indexed="true" stored="true" multiValued="false" />
+    <field name="PreviewImageLink" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="Languages" type="language_field" indexed="true" stored="true" multiValued="true" />
+    <field name="Categories" type="text_field" indexed="true" stored="true" multiValued="true" />
+    <field name="PlaceCoordinates" type="location_field" indexed="true" stored="true" multiValued="true" />
+    <field name="CompletionStatusName" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="CompletionStatusColorCode" type="string" indexed="true" stored="true" multiValued="false" />
+    <filed name="CompletionStatusColorCodeGradient" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <!-- Story fields -->
+    <field name="Dataset" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="Country" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="Provider" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="edmLanguage" type="language_field" indexed="true" stored="true" multiValued="true" />
+    <field name="dcLanguage" type="language_field" indexed="true" stored="true" multiValued="true" />
+    <field name="NotStartedAmount" type="long" indexed="true" stored="true" docValues="true" />
+    <field name="EditAmount" type="long" indexed="true" stored="true" docValues="true" />
+    <field name="ReviewAmount" type="long" indexed="true" stored="true" docValues="true" />
+    <field name="CompletedAmount" type="long" indexed="true" stored="true" docValues="true" />
+
+    <!-- Item fields -->
+    <field name="ItemId" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="TranscriptionText" type="text_field" indexed="true" stored="true" />
+    <field name="HtrTranscriptionText" type="text_field" indexed="true" stored="true" />
+    <field name="Keywords" type="text_field" indexed="true" stored="true" multiValued="true" />
+    <field name="PlaceName" type="text_field" indexed="true" stored="true" multiValued="true" />
+    <field name="WikidataPlaceName" type="text_field" indexed="true" stored="true" multiValued="true" />
+    <field name="PlaceWikidataId" type="string" indexed="true" stored="true" multiValued="true" />
+    <filed name="Person" type="text_field" indexed="true" stored="true" multiValued="true" />
+    <field name="TranscriptionStatusName" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="TranscriptionStatusColorCode" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="TranscriptionStatusColorCodeGradient" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="DescriptionStatusName" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="DescriptionStatusColorCode" type="string" indexed="true" stored="true" multiValued="false" />
+    <filed name="DescriptionStatusColorCodeGradient" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="LocationStatusName" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="LocationStatusColorCode" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="LocationStatusColorCodeGradient" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="TaggingStatusName" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="TaggingStatusColorCode" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="TaggingStatusColorCodeGradient" type="string" indexed="true" stored="true" multiValued="false" />
+  
+  </fields>
+
+  <uniqueKey>docId</uniqueKey>
+
+  <copyField source="edmLanguage" dest="Languages" />
+  <copyField source="dcLanguage" dest="Languages" />
+
+  <types>
+    <fieldType name="uuid" class="solr.UUIDField" />
+    <fieldType name="string" class="solr.StrField" />
+    <fieldType name="long" class="solr.LongPointField" />
+    <fieldType name="date_field" class="solr.DatePointField" />
+
+    <fieldType name="text_field" class="solr.TextField" positionIncrementGap="100" >
+      <analyzer>
+        <tokenizer class="solr.WhitespaceTokenizerFactory" />
+        <filter class="solr.ASCIIFoldingFilterFactory" />
+        <filter class="solr.LowerCaseFilterFactory" />
+        <filter class="solr.KStemFilterFactory" />
+      </analyzer>
+    </fieldType>
+
+    <fieldType name="language_field" class="solr.TextField" positionIncrementGap="100">
+        <analyzer type="index">
+    	    <tokenizer class="solr.WhitespaceTokenizerFactory" />
+    		<filter class="solr.LowerCaseFilterFactory" />
+    		<filter class="solr.SynonymFilterFactory" synonyms="lang_synonyms.txt" ignoreCase="true" expand="true" />
+    	</analyzer>
+    	<analyzer type="query">
+    	    <tokenizer class="solr.WhitespaceTokenizerFactory" />
+    		<filter class="solr.LowerCaseFilterFactory" />
+    	</analyzer>
+    </fieldType>
+
+    <fieldType name="location_field" class="solr.LatLonPointSpatialField" docValues="true" />
+
+  </types>
+</schema>

@@ -1,0 +1,45 @@
+ara, arabe, arabian, ar, اَلْعَرَبِيَّةُ
+bos, bosanski, bosnian, bs
+bul, bulgarian, български, bg
+cat, catalan, ca, català
+ces, čeština, czech, češki, cs
+cym, cymraeg
+dan, dansk, danish, da
+deu, deutsch, german, de
+ell, ελληνικά, greek
+eng, english, en, engleski
+est, eesti, estonian, et
+fra, français, french, fre, russe, serbe
+frysk, frisian, fy, fry
+fi, fin, finnish, suomi
+gaeilge, gle, irish, ga
+gre, ελληνικά, greek, el, ell
+georgian, ka, ქართული, geo, kat
+hebrew, עִבְרִית, ivrit, he, heb
+hrv, hrvatski, croatian, hr
+hun, magyar, hungarian, hu
+hye, armenian, հայերեն, hy, arm
+ita, italiano, italian, it
+is, ice, íslenska, icelandic
+jpn, japanese, ja, 日本語
+lav, latviešu, latvian, lv, lettish
+lat, latin, latinski, la
+lit, lithuanian, lietuvis, lt
+lëtzebuergesch, luxembourgish, lb
+mk, mac, mkd, makedonski, macedonic, македонски
+nederlands, nld, dutch, nl, flamand, néerlandais;
+nor, norwegian, norsk, no
+pol, polish, pl, polski
+por, português, portuguese, pt
+ron, română, romanian, ro
+rus, русский, russian, ru
+slk, slovenčina, slovak, slovenský, sk
+slv, slovenščina, slovenian, slovene, sl
+spa, spanish, spagnolo, espanol, espagnol, español
+srp, serbian, српски, sr, srpski
+sv, swedish, svenska, swe
+tur, turc, türkçe, turkish, tr
+ukrainian, українська, uk, ukr
+upper sorbian, hornjoserbšćina, hornjoserbsce, hsb
+lower sorbian, dolnoserbšćina, dolnoserbski, dsb
+und, undefined

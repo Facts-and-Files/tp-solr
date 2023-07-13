@@ -1,0 +1,414 @@
+<dataConfig>
+	<dataSource />
+	<document>
+		<entity
+			name="MergedItems"
+			transformer="RegexTransformer"
+			query="
+			  SELECT
+			    i.ItemId AS ItemId,
+		        s.StoryId AS StoryId,
+			    DATE_FORMAT(i.DateStart, '%Y-%m-%dT00:00:00Z') AS StartDate,
+			    DATE_FORMAT(i.DateEnd, '%Y-%m-%dT23:59:59Z') AS EndDate,
+			    s.ProjectId AS ProjectId,
+			    s.`dc:title` AS StoryTitle,
+			    DATE_FORMAT(i.Timestamp, '%Y-%m-%dT%TZ') AS Timestamp,
+			    i.Title AS Title,
+			    i.Description AS Description,
+			    i.ImageLink AS PreviewImageLink,
+			    transcriptionView.TranscriptionText AS TranscriptionText,
+			    transcriptionView.Languages AS Languages,
+			    htrTranscriptionView.TranscriptionText AS HtrTranscriptionText,
+			    htrTranscriptionView.Languages AS HtrLanguages,
+			    categoriesView.Categories AS Categories,
+			    keywordsView.Keywords AS Keywords,
+			    placesView.PlaceNames AS PlaceNames,
+			    placesView.WikidataPlaceNames AS WikidataPlaceNames,
+			    placesView.WikidataIds AS PlaceWikidataIds,
+			    placesView.Coordinates AS PlaceCoordinates,
+			    personsView.Person AS Persons,
+			    coStatus.Name AS CompletionStatusName,
+			    coStatus.ColorCode AS CompletionStatusColorCode,
+			    coStatus.ColorCodeGradient AS CompletionColorGradient,
+			    trStatus.Name AS TranscriptionStatusName,
+			    trStatus.ColorCode AS TranscriptionColorCode,
+			    trStatus.ColorCodeGradient AS TranscriptionColorCodeGradient,
+			    deStatus.Name AS DescriptionStatusName,
+			    deStatus.ColorCode AS DescriptionColorCode,
+			    deStatus.ColorCodeGradient AS DescriptionColorGradient,
+			    locStatus.Name AS LocationStatusName,
+			    locStatus.ColorCode AS LocationColorCode,
+			    locStatus.ColorCodeGradient AS LocationColorCodeGradient,
+			    taStatus.Name AS TaggingStatusName,
+			    taStatus.ColorCode AS TaggingColorCode,
+			    taStatus.ColorCodeGRadient AS TaggingColorCodeGradient
+			  FROM
+			    Item i
+			  JOIN
+			    Story s ON s.StoryId = i.StoryId
+			  LEFT JOIN
+			  (
+				SELECT
+				  ItemId,
+				  GROUP_CONCAT(DISTINCT (Category) SEPARATOR '#~#') AS Categories
+				FROM
+				  item_category_view
+				GROUP BY ItemId
+			  ) categoriesView ON categoriesView.ItemId = i.ItemId
+			  LEFT JOIN
+			  (
+				SELECT
+				  ItemId,
+				  GROUP_CONCAT(DISTINCT (Keyword) SEPARATOR '#~#') AS Keywords
+				FROM
+				  item_keyword_view
+				GROUP BY ItemId
+			  ) keywordsView ON keywordsView.ItemId = i.ItemId
+			  LEFT JOIN
+			  (
+				SELECT
+				  ItemId,
+				  GROUP_CONCAT(DISTINCT (PlaceName) SEPARATOR '#~#') AS PlaceNames,
+				  GROUP_CONCAT(DISTINCT (WikidataPlaceName) SEPARATOR '#~#') AS WikidataPlaceNames,
+				  GROUP_CONCAT(DISTINCT (TRIM(WikidataId)) SEPARATOR '#~#') AS WikidataIds,
+				  GROUP_CONCAT(DISTINCT (CONCAT(Latitude, ',', Longitude)) SEPARATOR '#~#') AS Coordinates
+				FROM
+				  item_place_view
+				GROUP BY ItemId
+			  ) placesView ON placesView.ItemId = i.ItemId
+			  LEFT JOIN
+			  (
+				SELECT
+				  ItemId,
+				  GROUP_CONCAT( CONCAT(IFNULL(FirstName, ''), ' ', IFNULL(LastName, '')) SEPARATOR '#~#') AS Person
+				FROM
+				  item_person_view
+				GROUP BY ItemId
+			  ) personsView ON personsView.ItemId = i.ItemId
+			  LEFT JOIN
+			  (
+				SELECT
+				  ItemId,
+				  ANY_VALUE(TextNoTags) AS TranscriptionText,
+				  GROUP_CONCAT(DISTINCT (Language) SEPARATOR '#~#') AS Languages
+				FROM
+				  item_transcription_view
+				WHERE
+				  CurrentVersion = 1
+				GROUP BY ItemId
+			  ) transcriptionView ON transcriptionView.ItemId = i.ItemId AND i.TranscriptionSource != 'htr'
+			  LEFT JOIN
+			  (
+				SELECT
+				  ItemId,
+				  ANY_VALUE(TranscriptionText) AS TranscriptionText,
+				  GROUP_CONCAT(DISTINCT (Language) SEPARATOR '#~#') AS Languages
+				FROM
+				  item_htr_transcription_view
+				GROUP BY ItemId
+			  ) htrTranscriptionView ON htrTranscriptionView.ItemId = i.Item.Id AND i.TranscriptionSource != 'manual'
+			  LEFT JOIN
+			    CompletionStatus coStatus ON i.CompletionStatusId = coStatus.CompletionStatusId
+			  LEFT JOIN
+			    CompletionStatus trStatus ON i.TranscriptionStatusId = trStatus.CompletionStatusId
+			  LEFT JOIN
+			    CompletionStatus deStatus ON i.DescriptionStatusId = deStatus.CompletionStatusId
+			  LEFT JOIN
+			    CompletionStatus locStatus ON i.LocationStatusId = locStatus.CompletionStatusId
+			  LEFT JOIN
+			    CompletionStatus taStatus ON i.TaggingStatusId = taStatus.CompletionStatusId
+			  "
+			deltaImportQuery="
+			  SELECT
+			    i.ItemId AS ItemId,
+			    DATE_FORMAT(i.DateStart, '%Y-%m-%dT00:00:00Z') AS StartDate,
+			    DATE_FORMAT(i.DateEnd, '%Y-%m-%dT23:59:59Z') AS EndDate,
+		        s.StoryId AS StoryId,
+			    s.ProjectId AS ProjectId,
+			    s.`dc:title` AS StoryTitle,
+			    DATE_FORMAT(i.Timestamp, '%Y-%m-%dT%TZ') AS Timestamp,
+			    i.Title AS Title,
+			    i.Description AS Description,
+			    i.ImageLink AS PreviewImageLink,
+			    transcriptionView.TranscriptionText AS TranscriptionText,
+			    transcriptionView.Languages AS Languages,
+			    htrTranscriptionView.TranscriptionText AS HtrTranscriptionText,
+			    htrTranscriptionView.Languages AS HtrLanguages,
+			    categoriesView.Categories AS Categories,
+			    keywordsView.Keywords AS Keywords,
+			    placesView.PlaceNames AS PlaceNames,
+			    placesView.WikidataPlaceNames AS WikidataPlaceNames,
+			    placesView.WikidataIds AS PlaceWikidataIds,
+			    placesView.Coordinates AS PlaceCoordinates,
+			    personsView.Person AS Persons,
+			    coStatus.Name AS CompletionStatusName,
+			    coStatus.ColorCode AS CompletionStatusColorCode,
+			    coStatus.ColorCodeGradient AS CompletionColorCodeGradient,
+			    trStatus.Name AS TranscriptionStatusName,
+			    trStatus.ColorCode AS TranscriptionColorCode,
+			    trStatus.ColorCodeGradient AS TranscriptionColorCodeGradient,
+			    deStatus.Name AS DescriptionStatusName,
+			    deStatus.ColorCode AS DescriptionColorCode,
+			    deStatus.ColorCodeGradient AS DescriptionColorGradient,
+			    locStatus.Name AS LocationStatusName,
+			    locStatus.ColorCode AS LocationColorCode,
+			    locStatus.ColorCodeGradient AS LocationColorCodeGradient,
+			    taStatus.Name AS TaggingStatusName,
+			    taStatus.ColorCode AS TaggingColorCode,
+			    taStatus.ColorCodeGradient AS TaggingColorCodeGradient
+			  FROM
+			    Item i
+			  JOIN
+			    Story s ON s.StoryId = i.StoryId
+			  LEFT JOIN
+			  (
+				SELECT
+				  ItemId,
+				  GROUP_CONCAT(DISTINCT (Category) SEPARATOR '#~#') AS Categories
+				FROM
+				  item_category_view
+				WHERE
+				  ItemId = '${dih.delta.ItemId}'
+				GROUP BY ItemId
+			  ) categoriesView ON categoriesView.itemId = i.ItemId
+			  LEFT JOIN
+			  (
+				SELECT
+				  ItemId,
+				  GROUP_CONCAT(DISTINCT (Keyword) SEPARATOR '#~#') AS Keywords
+				FROM
+				  item_keyword_view
+				WHERE
+				  ItemId = '${dih.delta.ItemId}'
+				GROUP BY ItemId
+			  ) keywordsView ON keywordsView.ItemId = i.ItemId
+			  LEFT JOIN
+			  (
+				SELECT
+				  ItemId,
+				  GROUP_CONCAT(DISTINCT (PlaceName) SEPARATOR '#~#') AS PlaceNames,
+				  GROUP_CONCAT(DISTINCT (WikidataPlaceName) SEPARATOR '#~#') AS WikidataPlaceNames,
+				  GROUP_CONCAT(DISTINCT (TRIM(WikidataId)) SEPARATOR '#~#') AS WikidataIds,
+				  GROUP_CONCAT(DISTINCT (CONCAT(Latitude, ',', Longitude)) SEPARATOR '#~#') AS Coordinates
+				FROM
+				  item_place_view
+				WHERE
+				  ItemId = '${dih.delta.ItemId}'
+				GROUP BY ItemId
+			  ) placesView ON placesView.ItemId = i.ItemId
+			  LEFT JOIN
+			  (
+				SELECT
+				  ItemId,
+				  GROUP_CONCAT( CONCAT(IFNULL(FirstName, ''), ' ', IFNULL(LastName, '')) SEPARATOR '#~#') AS Person
+				FROM
+				  item_person_view
+				WHERE
+				  ItemId = '${dih.delta.ItemId}'
+				GROUP BY ItemId
+			  ) personsView ON personsView.ItemId = i.ItemId
+			  LEFT JOIN
+			  (
+				SELECT
+				  ItemId,
+				  ANY_VALUE(TextNoTags) AS TranscriptionText,
+				  GROUP_CONCAT(DISTINCT (Language) SEPARATOR '#~#') AS Languages
+				FROM
+				  item_transcription_view
+				WHERE
+				  ItemId = '${dih.delta.ItemId}'  AND CurrentVersion = 1
+				GROUP BY ItemId
+			  ) transcriptionView ON transcriptionView.ItemId = i.ItemId AND i.TranscriptionSource != 'htr'
+			  LEFT JOIN
+			  (
+				SELECT
+				  ItemId,
+				  ANY_VALUE(TranscriptionText) AS TranscriptionText,
+				  GROUP_CONCAT(DISTINCT (Language) SEPARATOR '#~#') AS Languages
+				FROM
+				  item_htr_transcription_view
+				WHERE
+				  ItemId = '${dih.delta.ItemId}'
+				GROUP BY ItemId
+			  ) htrTranscriptionView ON htrTranscriptionView.ItemId = i.ItemId AND i.TranscriptionSource != 'manual'
+			  LEFT JOIN
+			    CompletionStatus coStatus ON i.CompletionStatusId = coStatus.CompletionStatusId
+			  LEFT JOIN
+			    CompletionStatus trStatus ON i.TranscriptionStatusId = trStatus.CompletionStatusId
+			  LEFT JOIN
+			    CompletionStatus deStatus ON i.DescriptionStatusId = deStatus.CompletionStatusId
+			  LEFT JOIN
+			    CompletionStatus locStatus ON i.LocationStatusId = locStatus.CompletionStatusId
+			  LEFT JOIN
+			    CompletionStatus taStatus ON i.TaggingStatusId = taStatus.CompletionStatusId
+			  WHERE i.ItemId = '${dih.delta.ItemId}';
+			"
+			deltaQuery="SELECT ItemId FROM Item WHERE LastUpdated > '${dih.last_index_time}'"
+			pk="ItemId"
+		>
+			<field column="ItemId" name="docId" />
+			<field column="ItemId" name="ItemId" />
+			<field column="StoryId" name="StoryId" />
+			<field column="StartDate" name="StartDate" />
+			<field column="EndDate" name="EndDate" />
+			<field column="Timestamp" name="Timestamp" />
+			<field column="ProjectId" name="ProjectId" />
+			<field column="StoryTitle" name="StoryTitle" />
+			<field column="Title" name="Title" />
+			<field column="Description" name="Description" />
+			<field column="PreviewImageLink" name="PreviewImageLink" />
+			<field column="TranscriptionText" name="TranscriptionText" />
+			<field column="Languages" name="Languages" splitBy="#~#" />
+			<field column="HtrTranscriptionText" name="HtrTranscriptionText" />
+			<field column="HtrLanguages" name="Languages" splitBy="#~#" />
+			<field column="Categories" name="Categories" splitBy="#~#" />
+			<field column="Keywords" name="Keywords" splitBy="#~#" />
+			<field column="PlaceNames" name="PlaceName" splitBy="#~#" />
+			<field column="WikidataPlaceNames" name="WikidataPlaceName" splitBy="#~#" />
+			<field column="PlaceWikidataIds" name="PlaceWikidataId" splitBy="#~#" />
+			<field column="PlaceCoordinates" name="PlaceCoordinates" splitBy="#~#" />
+			<field column="Persons" name="Person" splitBy="#~#" />
+			<field column="CompletionStatusName" name="CompletionStatusName" />
+			<field column="CompletionStatusColorCode" name="CompletionStatusColorCode" />
+			<field column="CompletionColorCodeGradient" name="CompletionStatusColorCodeGradient" />
+			<field column="TranscriptionStatusName" name="TranscriptionStatusName" />
+			<field column="TranscriptionColorCode" name="TranscriptionStatusColorCode" />
+			<field column="TranscriptionColorCodeGradient" name="TranscriptionStatusColorCodeGradient" />
+			<field column="DescriptionStatusName" name="DescriptionStatusName" />
+			<field column="DescriptionColorCode" name="DescriptionStatusColorCode" />
+			<field column="DescriptionColorCodeGradient" name="DescriptionStatusColorCodeGradient" />
+			<field column="LocationStatusName" name="LocationStatusName" />
+			<field column="LocationColorCode" name="LocationStatusColorCode" />
+			<field column="LocationColorCodeGradient" name="LocationStatusColorCodeGradient" />
+			<field column="TaggingStatusName" name="TaggingStatusName" />
+			<field column="TaggingColorCode" name="TaggingStatusColorCode" />
+			<field column="TaggingolorCodeGradient" name="TaggingStatusColorCodeGradient" />
+
+		</entity>
+		<entity
+		    name="MergedStories"
+			transformer="RegexTransformer"
+			query="SELECT StoryId FROM Story WHERE StoryId = 152023"
+			deltaImportQuery="
+			  SELECT
+			    s.StoryId AS StoryId,
+				s.Projectid AS ProjectId,
+				d.Name AS Dataset,
+				s.`edm:country` AS edmCountry,
+				s.`edm:provider` AS edmProvider,
+				l.NameEnglish AS edmLanguage,
+				s.`dc:language` AS dcLanguage,
+				c.Name AS CompletionStatus,
+				s.`dc:title` AS dcTitle,
+				s.`dc:description` AS dcDescription,
+				img.ImageLink AS PreviewImageLink,
+				categories.value AS Categories,
+				notStarted.NotStartedAmount AS NotStartedAmount,
+				edit.EditAmount AS EditAmount,
+				review.ReviewAmount AS ReviewAmount,
+				completed.CompletedAmount AS CompletedAmount
+			  FROM
+			    Story s
+			  LEFT JOIN
+			    Language l ON s.`edm:Language` = l.Code
+			  LEFT JOIN
+			    Dataset d ON s.DatasetId = d.DatasetId
+			  LEFT JOIN
+			    CompletionStatus c ON s.CompletionStatusId = c.CompletionStatusId
+			  JOIN
+			    story_first_item_view img ON img.StoryId = s.StoryId
+			  LEFT JOIN
+			  (
+				SELECT
+				  i.StoryId,
+				  GROUP_CONCAT(DISTINCT(p.Value) SEPARATOR '#~#') as Value
+				FROM
+				  Property p
+				  JOIN PropertyType pt ON p.PropertyTypeId = pt.PropertyTypeId
+				  JOIN ItemProperty ip ON p.PropertyId = ip.PropertyId
+				  JOIN Item i ON i.ItemId = ip.ItemId
+				WHERE
+				  i.StoryId = '${dih.delta.StoryId}' AND pt.Name = 'Category'
+				GROUP BY
+				  StoryId
+			  ) categories ON s.StoryId = categories.StoryId
+			  LEFT JOIN
+			  (
+				SELECT
+				  i.StoryId, count(*) AS NotStartedAmount
+				FROM
+				  Item i
+				JOIN
+				  CompletionStatus c ON c.CompletionStatusId = i.CompletionStatusId
+				WHERE
+				  i.StoryId = '${dih.delta.StoryId}' AND c.Name = 'Not Started'
+				GROUP BY
+				  StoryId
+			  ) notStarted ON notStarted.StoryId = s.StoryId
+			  LEFT JOIN
+			  (
+				SELECT
+				  i.StoryId, count(*) AS EditAmount
+				FROM
+				  Item i
+				JOIN
+				  CompletionStatus c ON c.CompletionStatusId = i.CompletionStatusId
+				WHERE
+				  i.StoryId = '${dih.delta.StoryId}' AND c.Name = 'Edit'
+				GROUP BY
+				  StoryId
+			  ) edit ON edit.StoryId = s.StoryId
+			  LEFT JOIN
+			  (
+				SELECT
+				  i.StoryId, count(*) AS ReviewAmount
+				FROM
+				  Item i
+				JOIN
+				  CompletionStatus c ON c.CompletionStatusId = i.CompletionStatusId
+				WHERE
+				  i.StoryId = '${dih.delta.StoryId}' AND c.Name = 'Review'
+				GROUP BY
+				  StoryId
+			  ) review ON review.StoryId = s.StoryId
+			  LEFT JOIN
+			  (
+				SELECT
+				  i.StoryId, count(*) AS CompletedAmount
+				FROM
+				  Item i
+				JOIN
+				  CompletionStatus c ON c.CompletionStatusId = i.CompletionStatusId
+				WHERE
+				  i.StoryId = '${dih.delta.StoryId}' AND c.Name = 'Completed'
+				GROUP BY
+				  StoryId
+			  ) completed ON completed.StoryId = s.StoryId
+			  WHERE
+			    s.StoryId = '${dih.delta.StoryId}'
+			  ORDER BY
+			    s.StoryId DESC;
+			"
+			deltaQuery="SELECT StoryId FROM Story WHERE LastUpdated > '${dih.delta.last_index_time}'"
+			pk="StoryId"
+		>
+		    <field column="StoryId" name="docId" />
+			<field column="StoryId" name="StoryId" />
+			<field column="ProjectId" name="ProjectId" />
+			<field column="Dataset" name="Dataset" />
+			<field column="edmCountry" name="Country" />
+			<field column="edmProvider" name="Provider" />
+			<field column="edmLanguage" name="edmLanguage" />
+			<field column="dcLanguage" name="dcLanguage" />
+			<field column="CompletionStatus" name="CompletionStatusName" />
+			<field column="dcTitle" name="StoryTitle" />
+			<field column="dcDescription" name="Description" />
+			<field column="PreviewImageLink" name="PreviewImageLink" />
+			<field column="Categories" name="Categories" />
+			<field column="NotStartedAmount" name="NotStartedAmount" />
+			<field column="EditAmount" name="EditAmount" />
+			<field column="ReviewAmount" name="ReviewAmount" />
+			<field column="CompletedAmount" name="CompletedAmount" />
+		</entity>
+	</document>
+</dataConfig>
