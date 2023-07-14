@@ -128,8 +128,10 @@
 			    s.`dc:title` AS StoryTitle,
 			    DATE_FORMAT(i.Timestamp, '%Y-%m-%dT%TZ') AS Timestamp,
 			    i.Title AS Title,
+				'Item' AS Type,
 			    i.Description AS Description,
 			    i.ImageLink AS PreviewImageLink,
+				i.TranscriptionSource as TranscriptionSource,
 			    transcriptionView.TranscriptionText AS TranscriptionText,
 			    transcriptionView.Languages AS Languages,
 			    htrTranscriptionView.TranscriptionText AS HtrTranscriptionText,
@@ -283,6 +285,8 @@
 			<field column="TaggingStatusName" name="TaggingStatusName" />
 			<field column="TaggingColorCode" name="TaggingStatusColorCode" />
 			<field column="TaggingolorCodeGradient" name="TaggingStatusColorCodeGradient" />
+			<field column="TranscriptionSource" name="TranscriptionSource" />
+			<field column="Type" name="Type" transformer="DefaultValueTransformer" template="Item"  />
 
 		</entity>
 		<entity
@@ -300,6 +304,7 @@
 				s.`dc:language` AS dcLanguage,
 				c.Name AS CompletionStatus,
 				s.`dc:title` AS dcTitle,
+				'Story' AS Type,
 				s.`dc:description` AS dcDescription,
 				img.ImageLink AS PreviewImageLink,
 				categories.value AS Categories,
@@ -398,8 +403,8 @@
 			<field column="Dataset" name="Dataset" />
 			<field column="edmCountry" name="Country" />
 			<field column="edmProvider" name="Provider" />
-			<field column="edmLanguage" name="edmLanguage" />
-			<field column="dcLanguage" name="dcLanguage" />
+			<field column="edmLanguage" name="Languages" />
+			<field column="dcLanguage" name="Languages" splitBy=" \|\| " />
 			<field column="CompletionStatus" name="CompletionStatusName" />
 			<field column="dcTitle" name="StoryTitle" />
 			<field column="dcDescription" name="Description" />
@@ -409,6 +414,8 @@
 			<field column="EditAmount" name="EditAmount" />
 			<field column="ReviewAmount" name="ReviewAmount" />
 			<field column="CompletedAmount" name="CompletedAmount" />
+			<field column="Type" name="Type" />
+
 		</entity>
 	</document>
 </dataConfig>
