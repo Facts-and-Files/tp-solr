@@ -9,7 +9,7 @@ deu, deutsch, german, de
 ell, ελληνικά, greek
 eng, english, en, engleski
 est, eesti, estonian, et
-fra, français, french, fre, russe, serbe
+fra, français, french, fre
 frysk, frisian, fy, fry
 fi, fin, finnish, suomi
 gaeilge, gle, irish, ga

@@ -151,7 +151,7 @@
 			    trStatus.ColorCodeGradient AS TranscriptionColorCodeGradient,
 			    deStatus.Name AS DescriptionStatusName,
 			    deStatus.ColorCode AS DescriptionColorCode,
-			    deStatus.ColorCodeGradient AS DescriptionColorGradient,
+			    deStatus.ColorCodeGradient AS DescriptionColorCodeGradient,
 			    locStatus.Name AS LocationStatusName,
 			    locStatus.ColorCode AS LocationColorCode,
 			    locStatus.ColorCodeGradient AS LocationColorCodeGradient,
@@ -284,7 +284,7 @@
 			<field column="LocationColorCodeGradient" name="LocationStatusColorCodeGradient" />
 			<field column="TaggingStatusName" name="TaggingStatusName" />
 			<field column="TaggingColorCode" name="TaggingStatusColorCode" />
-			<field column="TaggingolorCodeGradient" name="TaggingStatusColorCodeGradient" />
+			<field column="TaggingColorCodeGradient" name="TaggingStatusColorCodeGradient" />
 			<field column="TranscriptionSource" name="TranscriptionSource" />
 			<field column="Type" name="Type" transformer="DefaultValueTransformer" template="Item"  />
 
@@ -307,7 +307,7 @@
 				'Story' AS Type,
 				s.`dc:description` AS dcDescription,
 				img.ImageLink AS PreviewImageLink,
-				categories.value AS Categories,
+				categories.Value AS Categories,
 				notStarted.NotStartedAmount AS NotStartedAmount,
 				edit.EditAmount AS EditAmount,
 				review.ReviewAmount AS ReviewAmount,
@@ -330,7 +330,7 @@
 				FROM
 				  Property p
 				  JOIN PropertyType pt ON p.PropertyTypeId = pt.PropertyTypeId
-				  JOIN ItemProperty ip ON p.PropertyId = ip.PropertyId
+				  JOIN ItemProperty ip ON ip.PropertyId = p.PropertyId
 				  JOIN Item i ON i.ItemId = ip.ItemId
 				WHERE
 				  i.StoryId = '${dih.delta.StoryId}' AND pt.Name = 'Category'
@@ -406,10 +406,10 @@
 			<field column="edmLanguage" name="Languages" />
 			<field column="dcLanguage" name="Languages" splitBy=" \|\| " />
 			<field column="CompletionStatus" name="CompletionStatusName" />
-			<field column="dcTitle" name="StoryTitle" />
+			<field column="dcTitle" name="Title" />
 			<field column="dcDescription" name="Description" />
 			<field column="PreviewImageLink" name="PreviewImageLink" />
-			<field column="Categories" name="Categories" />
+			<field column="Categories" name="Categories" splitBy="#~#" />
 			<field column="NotStartedAmount" name="NotStartedAmount" />
 			<field column="EditAmount" name="EditAmount" />
 			<field column="ReviewAmount" name="ReviewAmount" />

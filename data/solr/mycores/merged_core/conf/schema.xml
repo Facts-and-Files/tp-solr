@@ -19,7 +19,7 @@
     <field name="PlaceCoordinates" type="location_field" indexed="true" stored="true" multiValued="true" />
     <field name="CompletionStatusName" type="string" indexed="true" stored="true" multiValued="false" docValues="true" />
     <field name="CompletionStatusColorCode" type="string" indexed="true" stored="true" multiValued="false" />
-    <filed name="CompletionStatusColorCodeGradient" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="CompletionStatusColorCodeGradient" type="string" indexed="true" stored="true" multiValued="false" />
     <field name="Type" type="string" indexed="true" stored="true" multiValued="false" />
 
     <!-- Text field, default field to run querries on -->
@@ -44,13 +44,13 @@
     <field name="PlaceName" type="string" indexed="true" stored="true" multiValued="true" />
     <field name="WikidataPlaceName" type="string" indexed="true" stored="true" multiValued="true" />
     <field name="PlaceWikidataId" type="string" indexed="true" stored="true" multiValued="true" />
-    <filed name="Person" type="string" indexed="true" stored="true" multiValued="true" />
+    <field name="Person" type="string" indexed="true" stored="true" multiValued="true" />
     <field name="TranscriptionStatusName" type="string" indexed="true" stored="true" multiValued="false" />
     <field name="TranscriptionStatusColorCode" type="string" indexed="true" stored="true" multiValued="false" />
     <field name="TranscriptionStatusColorCodeGradient" type="string" indexed="true" stored="true" multiValued="false" />
     <field name="DescriptionStatusName" type="string" indexed="true" stored="true" multiValued="false" />
     <field name="DescriptionStatusColorCode" type="string" indexed="true" stored="true" multiValued="false" />
-    <filed name="DescriptionStatusColorCodeGradient" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="DescriptionStatusColorCodeGradient" type="string" indexed="true" stored="true" multiValued="false" />
     <field name="LocationStatusName" type="string" indexed="true" stored="true" multiValued="false" />
     <field name="LocationStatusColorCode" type="string" indexed="true" stored="true" multiValued="false" />
     <field name="LocationStatusColorCodeGradient" type="string" indexed="true" stored="true" multiValued="false" />
@@ -66,6 +66,7 @@
 
   <!-- <copyField source="edmLanguage" dest="Languages" />
   <copyField source="dcLanguage" dest="Languages" /> -->
+  <copyField source="Person" dest="text" />
   <copyField source="TranscriptionText" dest="text" />
   <copyField source="HtrTranscriptionText" dest="text" />
   <copyField source="Description" dest="text" />
