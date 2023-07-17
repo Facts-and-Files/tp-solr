@@ -74,6 +74,7 @@
   <copyField source="Keywords" dest="text" />
   <copyField source="Categories" dest="text" />
   <copyField source="PlaceName" dest="text" />
+  <copyField source="Title" dest="text" />
 
   <types>
     <fieldType name="string" class="solr.StrField" />
