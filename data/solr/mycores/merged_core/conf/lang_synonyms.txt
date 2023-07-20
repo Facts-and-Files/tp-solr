@@ -27,7 +27,7 @@ lat, latin, latinski, la
 lit, lithuanian, lietuvis, lt
 lëtzebuergesch, luxembourgish, lb
 mk, mac, mkd, makedonski, macedonic, македонски
-nederlands, nld, dutch, nl, flamand, néerlandais;
+nederlands, nld, dutch, nl
 nor, norwegian, norsk, no
 pol, polish, pl, polski
 por, português, portuguese, pt
