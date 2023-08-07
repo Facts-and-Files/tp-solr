@@ -126,7 +126,7 @@
 		        s.StoryId AS StoryId,
 			    s.ProjectId AS ProjectId,
 			    s.`dc:title` AS StoryTitle,
-				s.`dc:publisher` AS Institution,
+				s.`edm:dataProvider` AS Institution,
 				s.`edm:country` AS Country,
 				d.Name AS Dataset,
 			    DATE_FORMAT(i.Timestamp, '%Y-%m-%dT%TZ') AS Timestamp,
@@ -316,7 +316,7 @@
 				s.`dc:description` AS dcDescription,
 				s.PlaceName as PlaceName,
 				CONCAT(s.PlaceLatitude, ',', s.PlaceLongitude) AS Coordinates,
-				s.`dc:publisher` AS Institution,
+				s.`edm:dataProvider` AS Institution,
 				img.ImageLink AS PreviewImageLink,
 				categories.Value AS Categories,
 				notStarted.NotStartedAmount AS NotStartedAmount,
@@ -439,15 +439,18 @@
 		    SELECT
 			  'Transcription' AS Type,
 			  i.ItemId AS ItemId,
-			  CONCAT(i.ItemId, UUID()) AS TranscriptionId,
+			  CONCAT(i.ItemId, s.StoryId) AS TranscriptionId,
 			  i.Title AS Title,
 			  s.StoryId AS StoryId,
 			  s.`dc:title` AS StoryTitle,
+			  s.`edm:dataProvider` AS Institution,
+			  s.`edm:country` AS Country,
 			  DATE_FORMAT(tr.Timestamp, '%Y-%m-%dT%TZ' ) AS Timestamp,
 			  i.ImageLink AS PreviewImageLink,
 			  i.TranscriptionSource AS TranscriptionSource,
 			  tr.TranscriptionText AS TranscriptionText,
 			  trLanguages.Languages AS Languages,
+			  categoriesView.Categories AS Categories,
 			  htrTrView.TranscriptionText AS HtrTranscriptionText,
 			  htrTrView.Languages AS HtrLanguages,
 			  trStatus.Name AS TranscriptionStatusName,
@@ -484,6 +487,17 @@
 			(
 			  SELECT
 			    ItemId,
+				GROUP_CONCAT(DISTINCT (Category) SEPARATOR '#~#') AS Categories
+			  FROM
+			    item_category_view
+			  WHERE
+			    ItemId = '${dih.delta.ItemId}'
+			  GROUP BY ItemId
+			) categoriesView ON categoriesView.ItemId = i.ItemId
+			LEFT JOIN
+			(
+			  SELECT
+			    ItemId,
 				ANY_VALUE(TranscriptionText) AS TranscriptionText,
 				GROUP_CONCAT(DISTINCT (Language) SEPARATOR '#~#') AS Languages
 			  FROM
@@ -492,6 +506,8 @@
 			    ItemId = '${dih.delta.ItemId}'
 			  GROUP BY ItemId
 			) htrTrView ON htrTrView.ItemId = i.ItemId AND i.TranscriptionSource != 'manual'
+			LEFT JOIN
+			  Dataset d ON s.DatasetId = d.DatasetId AND s.StoryId = i.StoryId
 			LEFT JOIN
 			  CompletionStatus trStatus ON i.TranscriptionStatusId = trStatus.CompletionStatusId
 			WHERE i.TranscriptionStatusId != 1 AND i.ItemId = '${dih.delta.ItemId}';
@@ -506,6 +522,9 @@
 		  <field column="Title" name="Title" />
 		  <field column="StoryTitle" name="StoryTitle" />
 		  <field column="Type" name="Type" />
+		  <field column="Categories" name="Categories" splitBy="#~#" />
+		  <field column="Dataset" name="Dataset" />
+		  <field column="Country" name="Country" />
 		  <field column="Timestamp" name="Timestamp" />
 		  <field column="PreviewImageLink" name="PreviewImageLink" />
 		  <field column="TranscriptionSource" name="TranscriptionSource" />
@@ -516,6 +535,7 @@
 		  <field column="TranscriptionStatusName" name="TranscriptionStatusName" />
 		  <field column="TranscriptionColorCode" name="TranscriptionStatusColorCode" />
 		  <field column="TranscriptionColorCodeGradient" name="TranscriptionStatusColorCodeGradient" />
+		  <field column="TranscriptionStatusName" name="CompletionStatusName" />
 
 		</entity>
 	</document>
