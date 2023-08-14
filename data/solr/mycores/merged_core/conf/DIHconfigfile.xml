@@ -116,7 +116,7 @@
 			  LEFT JOIN
 			    CompletionStatus locStatus ON i.LocationStatusId = locStatus.CompletionStatusId
 			  LEFT JOIN
-			    CompletionStatus taStatus ON i.TaggingStatusId = taStatus.CompletionStatusId
+			    CompletionStatus taStatus ON i.TaggingStatusId = taStatus.CompletionStatusId;
 			  "
 			deltaImportQuery="
 			  SELECT
@@ -264,9 +264,9 @@
 			<field column="Title" name="Title" />
 			<field column="Description" name="Description" />
 			<field column="PreviewImageLink" name="PreviewImageLink" />
-			<field column="TranscriptionText" name="TranscriptionText" />
+			<!-- <field column="TranscriptionText" name="TranscriptionText" /> -->
 			<field column="Languages" name="Languages" splitBy="#~#" />
-			<field column="HtrTranscriptionText" name="HtrTranscriptionText" />
+			<!-- <field column="HtrTranscriptionText" name="HtrTranscriptionText" /> -->
 			<field column="HtrLanguages" name="Languages" splitBy="#~#" />
 			<field column="Categories" name="Categories" splitBy="#~#" />
 			<field column="Keywords" name="Keywords" splitBy="#~#" />
