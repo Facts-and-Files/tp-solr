@@ -58,7 +58,7 @@
     <field name="TaggingStatusName" type="string" indexed="true" stored="true" multiValued="false" />
     <field name="TaggingStatusColorCode" type="string" indexed="true" stored="true" multiValued="false" />
     <field name="TaggingStatusColorCodeGradient" type="string" indexed="true" stored="true" multiValued="false" />
-    <field name="TranscriptionSource" type="string" indexed="true" stored="false" multiValued="false" />
+    <field name="TranscriptionSource" type="string" indexed="true" stored="true" multiValued="false" />
   
   </fields>
 
