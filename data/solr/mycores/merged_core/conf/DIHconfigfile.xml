@@ -310,6 +310,10 @@
 				s.`edm:provider` AS edmProvider,
 				l.NameEnglish AS edmLanguage,
 				s.`dc:language` AS dcLanguage,
+				CASE
+				    WHEN s.HasHtr = 1 THEN 'htr'
+					WHEN s.HasHtr = 0 THEN 'manual'
+				END AS TranscriptionSource,
 				c.Name AS CompletionStatus,
 				s.`dc:title` AS dcTitle,
 				'Story' AS Type,
@@ -416,6 +420,7 @@
 			<field column="edmProvider" name="Provider" />
 			<field column="edmLanguage" name="Languages" />
 			<field column="dcLanguage" name="Languages" splitBy=" \|\| " />
+			<field column="TranscriptionSource" name="TranscriptionSource" />
 			<field column="CompletionStatus" name="CompletionStatusName" />
 			<field column="dcTitle" name="Title" />
 			<field column="dcDescription" name="Description" />
