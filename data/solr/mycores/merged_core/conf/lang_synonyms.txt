@@ -1,0 +1,44 @@
+ara, arabe, arabian, ar, اَلْعَرَبِيَّةُ , arabic/اَلْعَرَبِيَّةُ
+bos, bosanski, bosnian, bs, bosnian/bosanski
+bul, bulgarian, български, bg, bulgarian/български
+cat, catalan, ca, català, catalan/català
+ces, čeština, czech, češki, cs, czech/čeština
+cym, cymraeg, welsh/cymraeg
+dan, dansk, danish, da, danish/dansk
+deu, deutsch, german, de, german/deutsch
+ell, ελληνικά, greek, greek/ελληνικά
+eng, english, en, engleski
+est, eesti, estonian, et, estonian/eesti
+fra, français, french, fre, french/français
+frysk, frisian, fy, fry, frisian/frysk
+fi, fin, finnish, suomi, finnish/suomi
+gaeilge, gle, irish, ga, irish/gaeilge
+georgian, ka, ქართული, geo, kat, georgian/ქართული
+hebrew, עִבְרִית, ivrit, he, heb, hebrew/עִבְרִית
+hrv, hrvatski, croatian, hr, croatian/hrvatski
+hun, magyar, hungarian, hu, hungarian/magyar
+hye, armenian, հայերեն, hy, arm, armenian/հայերեն
+ita, italiano, italian, it, italian/italiano
+is, ice, íslenska, icelandic, icelandic/íslenska
+jpn, japanese, ja, 日本語, japanese/日本語
+lav, latviešu, latvian, lv, lettish, latvian/latviešu
+lat, latin, latinski, la
+lit, lithuanian, lietuvis, lt, lithuanian/lietuvis
+lëtzebuergesch, luxembourgish, lb, luxembourgish/lëtzebuergesch
+mk, mac, mkd, makedonski, macedonic, македонски, macedonic/македонски
+nederlands, nld, dutch, nl, dutch/nederlands
+nor, norwegian, norsk, no, norwegian/norsk
+pol, polish, pl, polski, polish/polski
+por, português, portuguese, pt, portuguese/português
+ron, română, romanian, ro, romanian/română
+rus, русский, russian, ru, russian/русский
+slk, slovenčina, slovak, slovenský, sk, slovak/slovenčina
+slv, slovenščina, slovenian, slovene, sl, slovenian/slovenščina
+spa, spanish, spagnolo, espanol, espagnol, español, spanish/español
+srp, serbian, српски, sr, srpski, serbian/српски
+sv, swedish, svenska, swe, swedish/svenska
+tur, turc, türkçe, turkish, tr, turkish/türkçe
+ukrainian, українська, uk, ukr, ukrainian/українська
+upper sorbian, hornjoserbšćina, hornjoserbsce, hsb, upper sorbian/hornjoserbšćina
+lower sorbian, dolnoserbšćina, dolnoserbski, dsb, lower sorbian/dolnoserbšćina
+und, undefined

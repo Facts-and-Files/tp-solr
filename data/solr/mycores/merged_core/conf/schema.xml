@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<schema name="merged_core" version="1.6">
+  <fields>
+
+    <!-- Standard fields for both Stories and Items -->
+    <field name="docId" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="_version_" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="StoryId" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="StartDate" type="date_field" indexed="true" stored="true" docValues="true" multiValued="false" />
+    <field name="EndDate" type="date_field" indexed="true" stored="true" docValues="true" multiValued="false" />
+    <field name="Timestamp" type="date_field" indexed="true" stored="true" docValues="true" multiValued="false" />
+    <field name="ProjectId" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="StoryTitle" type="transcription_field" indexed="true" stored="true" multiValued="false" />
+    <field name="Title" type="transcription_field" indexed="true" stored="true" multiValued="false" />
+    <field name="Description" type="transcription_field" indexed="true" stored="true" multiValued="false" />
+    <field name="PreviewImageLink" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="Languages" type="language_field" indexed="true" stored="true" multiValued="true" />
+    <field name="Categories" type="string" indexed="true" stored="true" multiValued="true" docValues="true" />
+    <field name="PlaceCoordinates" type="location_field" indexed="true" stored="true" multiValued="true" />
+    <field name="CompletionStatusName" type="string" indexed="true" stored="true" multiValued="false" docValues="true" />
+    <field name="CompletionStatusColorCode" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="CompletionStatusColorCodeGradient" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="Institution" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="Type" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <!-- Text field, default field to run querries on -->
+    <field name="text" type="text_field" indexed="true" stored="false" multiValued="true" />
+
+    <!-- Story fields -->
+    <field name="Dataset" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="Country" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="Provider" type="string" indexed="true" stored="true" multiValued="false" />
+    <!-- <field name="edmLanguage" type="language_field" indexed="true" stored="true" multiValued="true" />
+    <field name="dcLanguage" type="language_field" indexed="true" stored="true" multiValued="true" /> -->
+    <field name="NotStartedAmount" type="long" indexed="true" stored="true" docValues="true" />
+    <field name="EditAmount" type="long" indexed="true" stored="true" docValues="true" />
+    <field name="ReviewAmount" type="long" indexed="true" stored="true" docValues="true" />
+    <field name="CompletedAmount" type="long" indexed="true" stored="true" docValues="true" />
+
+    <!-- Item fields -->
+    <field name="ItemId" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="TranscriptionText" type="transcription_field" indexed="true" stored="true" />
+    <field name="HtrTranscriptionText" type="transcription_field" indexed="true" stored="true" />
+    <field name="Keywords" type="string" indexed="true" stored="true" multiValued="true" />
+    <field name="PlaceName" type="transcription_field" indexed="true" stored="true" multiValued="true" />
+    <field name="WikidataPlaceName" type="transcription_field" indexed="true" stored="true" multiValued="true" />
+    <field name="PlaceWikidataId" type="string" indexed="true" stored="true" multiValued="true" />
+    <field name="Person" type="transcription_field" indexed="true" stored="true" multiValued="true" />
+    <field name="TranscriptionStatusName" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="TranscriptionStatusColorCode" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="TranscriptionStatusColorCodeGradient" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="DescriptionStatusName" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="DescriptionStatusColorCode" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="DescriptionStatusColorCodeGradient" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="LocationStatusName" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="LocationStatusColorCode" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="LocationStatusColorCodeGradient" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="TaggingStatusName" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="TaggingStatusColorCode" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="TaggingStatusColorCodeGradient" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="TranscriptionSource" type="string" indexed="true" stored="true" multiValued="false" />
+  
+  </fields>
+
+  <field name="IndexingTimestamp" type="date_field" indexed="true" stored="true" default="NOW" multiValued="false" />
+  <uniqueKey>docId</uniqueKey>
+
+  <!-- <copyField source="edmLanguage" dest="Languages" />
+  <copyField source="dcLanguage" dest="Languages" /> -->
+  <copyField source="Person" dest="text" />
+  <copyField source="TranscriptionText" dest="text" />
+  <copyField source="HtrTranscriptionText" dest="text" />
+  <copyField source="Description" dest="text" />
+  <copyField source="StoryTitle" dest="text" />
+  <copyField source="Keywords" dest="text" />
+  <copyField source="Categories" dest="text" />
+  <copyField source="PlaceName" dest="text" />
+  <copyField source="Title" dest="text" />
+
+  <types>
+    <fieldType name="string" class="solr.StrField" />
+    <fieldType name="long" class="solr.LongPointField" />
+    <fieldType name="date_field" class="solr.DatePointField" />
+
+    <fieldType name="transcription_field" class="solr.TextField" >
+      <analyzer>
+        <tokenizer class="solr.WhitespaceTokenizerFactory" />
+        <filter class="solr.ASCIIFoldingFilterFactory" />
+        <filter class="solr.LowerCaseFilterFactory" />
+      </analyzer>
+    </fieldType>
+
+    <fieldType name="text_field" class="solr.TextField" positionIncrementGap="100" >
+		  <analyzer>
+		  	<tokenizer class="solr.WhitespaceTokenizerFactory" />
+		  	<filter class="solr.ASCIIFoldingFilterFactory" />
+		  	<filter class="solr.LowerCaseFilterFactory" />
+		  	<filter class="solr.KStemFilterFactory" />
+		  </analyzer>
+    </fieldType>
+
+    <fieldType name="language_field" class="solr.TextField" positionIncrementGap="100">
+        <analyzer type="index">
+    	    <tokenizer class="solr.WhitespaceTokenizerFactory" />
+    		  <filter class="solr.LowerCaseFilterFactory" />
+    		  <filter class="solr.SynonymGraphFilterFactory" synonyms="lang_synonyms.txt" ignoreCase="true" expand="true" />
+    	</analyzer>
+    	<analyzer type="query">
+    	    <tokenizer class="solr.WhitespaceTokenizerFactory" />
+    		  <filter class="solr.LowerCaseFilterFactory" />
+    	</analyzer>
+    </fieldType>
+
+    <fieldType name="location_field" class="solr.LatLonPointSpatialField" docValues="true" />
+
+  </types>
+</schema>
