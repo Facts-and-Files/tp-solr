@@ -131,6 +131,7 @@
 				s.Public AS Public,
 				d.Name AS Dataset,
 			    DATE_FORMAT(i.Timestamp, '%Y-%m-%dT%TZ') AS Timestamp,
+				DATE_FORMAT(i.LastUpdated, '%Y-%m-%dT%TZ') AS LastUpdated,
 			    i.Title AS Title,
 				'Item' AS Type,
 			    i.Description AS Description,
@@ -258,6 +259,7 @@
 			<field column="StartDate" name="StartDate" />
 			<field column="EndDate" name="EndDate" />
 			<field column="Timestamp" name="Timestamp" />
+			<field column="LastUpdated" name="LastUpdated" />
 			<field column="ProjectId" name="ProjectId" />
 			<field column="StoryTitle" name="StoryTitle" />
 			<field column="Title" name="Title" />
@@ -320,6 +322,7 @@
 				s.`dc:description` AS dcDescription,
 				s.PlaceName AS PlaceName,
 				DATE_FORMAT(s.Timestamp, '%Y-%m-%dT%TZ') AS Timestamp,
+				DATE_FORMAT(s.LastUpdated, '%Y-%m-%dT%TZ') AS LastUpdated,
 				s.Public AS Public,
 				CONCAT(s.PlaceLatitude, ',', s.PlaceLongitude) AS Coordinates,
 				s.`edm:dataProvider` AS Institution,
@@ -437,6 +440,7 @@
 			<field column="Institution" name="Institution" />
 			<field column="Type" name="Type" />
 			<field column="Timestamp" name="Timestamp" />
+			<field column="LastUpdated" name="LastUpdated" />
 			<field column="Public" name="Public" />
 
 		</entity>
@@ -457,6 +461,7 @@
 			  s.Public AS Public,
 			  d.Name AS Dataset,
 			  DATE_FORMAT(tr.Timestamp, '%Y-%m-%dT%TZ' ) AS Timestamp,
+			  DATE_FORMAT(tr.LastUpdated, '%Y-%m-%dT%TZ') AS LastUpdated,
 			  i.ImageLink AS PreviewImageLink,
 			  i.TranscriptionSource AS TranscriptionSource,
 			  tr.TranscriptionText AS TranscriptionText,
@@ -476,7 +481,8 @@
 			  SELECT
 			    ItemId,
 				ANY_VALUE(TextNoTags) AS TranscriptionText,
-				DATE_FORMAT(Timestamp, '%Y-%m-%dT%TZ') AS Timestamp
+				DATE_FORMAT(Timestamp, '%Y-%m-%dT%TZ') AS Timestamp,
+				DATE_FORMAT(Timestamp, '%Y-%m-%dT%TZ') AS LastUpdated
 			  FROM
 			    Transcription
 			  WHERE
@@ -523,7 +529,15 @@
 			  CompletionStatus trStatus ON i.TranscriptionStatusId = trStatus.CompletionStatusId
 			WHERE i.TranscriptionStatusId != 1 AND i.ItemId = '${dih.delta.ItemId}';
 		  "
-		  deltaQuery="SELECT ItemId FROM Item WHERE LastUpdated > '${dih.last_index_time}'"
+		  deltaQuery="SELECT ItemId 
+		    FROM Item i
+			WHERE EXISTS (
+				SELECT 1
+				FROM Transcription t
+				WHERE t.ItemId = i.ItemId
+				AND t.CurrentVersion = 1
+				AND t.Timestamp > '${dih.last_index_time}'
+			)"
 		  pk="ItemId"
 		>
 		  
@@ -537,6 +551,7 @@
 		  <field column="Dataset" name="Dataset" />
 		  <field column="Country" name="Country" />
 		  <field column="Timestamp" name="Timestamp" />
+		  <field column="LastUpdated" name="LastUpdated" />
 		  <field column="PreviewImageLink" name="PreviewImageLink" />
 		  <field column="TranscriptionSource" name="TranscriptionSource" />
 		  <field column="TranscriptionText" name="TranscriptionText" />

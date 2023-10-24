@@ -9,6 +9,7 @@
     <field name="StartDate" type="date_field" indexed="true" stored="true" docValues="true" multiValued="false" />
     <field name="EndDate" type="date_field" indexed="true" stored="true" docValues="true" multiValued="false" />
     <field name="Timestamp" type="date_field" indexed="true" stored="true" docValues="true" multiValued="false" />
+    <field name="LastUpdated" type="date_field" indexed="true" stored="true" docValues="true" multiValued="false" />
     <field name="ProjectId" type="string" indexed="true" stored="true" multiValued="false" />
     <field name="StoryTitle" type="transcription_field" indexed="true" stored="true" multiValued="false" />
     <field name="Title" type="transcription_field" indexed="true" stored="true" multiValued="false" />
