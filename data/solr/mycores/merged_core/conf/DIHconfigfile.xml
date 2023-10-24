@@ -411,7 +411,7 @@
 			  ORDER BY
 			    s.StoryId DESC;
 			"
-			deltaQuery="SELECT StoryId FROM Story WHERE LastUpdated > '${dih.delta.last_index_time}'"
+			deltaQuery="SELECT StoryId FROM Story WHERE LastUpdated > '${dih.last_index_time}'"
 			pk="StoryId"
 		>
 		    <field column="StoryId" name="docId" />
