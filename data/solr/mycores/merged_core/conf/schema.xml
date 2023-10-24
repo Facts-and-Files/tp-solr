@@ -22,6 +22,7 @@
     <field name="CompletionStatusColorCodeGradient" type="string" indexed="true" stored="true" multiValued="false" />
     <field name="Institution" type="string" indexed="true" stored="true" multiValued="false" />
     <field name="Type" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="Public" type="long" indexed="true" stored="true" multiValued="false" />
 
     <!-- Text field, default field to run querries on -->
     <field name="text" type="text_field" indexed="true" stored="false" multiValued="true" />

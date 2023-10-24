@@ -128,6 +128,7 @@
 			    s.`dc:title` AS StoryTitle,
 				s.`edm:dataProvider` AS Institution,
 				s.`edm:country` AS Country,
+				s.Public AS Public,
 				d.Name AS Dataset,
 			    DATE_FORMAT(i.Timestamp, '%Y-%m-%dT%TZ') AS Timestamp,
 			    i.Title AS Title,
@@ -292,6 +293,7 @@
 			<field column="Dataset" name="Dataset" />
 			<field column="Institution" name="Institution" />
 			<field column="Country" name="Country" />
+			<field column="Public" name="Public" />
 			<field column="Type" name="Type" transformer="DefaultValueTransformer" template="Item"  />
 
 		</entity>
@@ -316,7 +318,9 @@
 				s.`dc:title` AS dcTitle,
 				'Story' AS Type,
 				s.`dc:description` AS dcDescription,
-				s.PlaceName as PlaceName,
+				s.PlaceName AS PlaceName,
+				DATE_FORMAT(s.Timestamp, '%Y-%m-%dT%TZ') AS Timestamp,
+				s.Public AS Public,
 				CONCAT(s.PlaceLatitude, ',', s.PlaceLongitude) AS Coordinates,
 				s.`edm:dataProvider` AS Institution,
 				img.ImageLink AS PreviewImageLink,
@@ -432,6 +436,8 @@
 			<field column="Coordinates" name="PlaceCoordinates" />
 			<field column="Institution" name="Institution" />
 			<field column="Type" name="Type" />
+			<field column="Timestamp" name="Timestamp" />
+			<field column="Public" name="Public" />
 
 		</entity>
 		<entity
@@ -448,6 +454,8 @@
 			  s.`dc:title` AS StoryTitle,
 			  s.`edm:dataProvider` AS Institution,
 			  s.`edm:country` AS Country,
+			  s.Public AS Public,
+			  d.Name AS Dataset,
 			  DATE_FORMAT(tr.Timestamp, '%Y-%m-%dT%TZ' ) AS Timestamp,
 			  i.ImageLink AS PreviewImageLink,
 			  i.TranscriptionSource AS TranscriptionSource,
@@ -539,6 +547,8 @@
 		  <field column="TranscriptionColorCode" name="TranscriptionStatusColorCode" />
 		  <field column="TranscriptionColorCodeGradient" name="TranscriptionStatusColorCodeGradient" />
 		  <field column="TranscriptionStatusName" name="CompletionStatusName" />
+		  <field column="Public" name="Public" />
+		  <field column="Dataset" name="Dataset" />
 
 		</entity>
 	</document>
