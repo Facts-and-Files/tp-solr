@@ -106,7 +106,7 @@
 				FROM
 				  item_htr_transcription_view
 				GROUP BY ItemId
-			  ) htrTranscriptionView ON htrTranscriptionView.ItemId = i.Item.Id AND i.TranscriptionSource != 'manual'
+			  ) htrTranscriptionView ON htrTranscriptionView.ItemId = i.ItemId AND i.TranscriptionSource != 'manual'
 			  LEFT JOIN
 			    CompletionStatus coStatus ON i.CompletionStatusId = coStatus.CompletionStatusId
 			  LEFT JOIN
@@ -310,6 +310,8 @@
 				d.Name AS Dataset,
 				s.`edm:country` AS edmCountry,
 				s.`edm:provider` AS edmProvider,
+				COALESCE(s.`edm:begin`,s.`edm:year`) AS StartDate,
+				s.`edm:end` AS EndDate,
 				l.NameEnglish AS edmLanguage,
 				s.`dc:language` AS dcLanguage,
 				CASE
@@ -442,6 +444,8 @@
 			<field column="Timestamp" name="Timestamp" />
 			<field column="LastUpdated" name="LastUpdated" />
 			<field column="Public" name="Public" />
+			<field column="StartDate" name="TempStartDate" splitBy=" \|\| " />
+			<field column="EndDate" name="TempEndDate" splitBy=" \|\| " />
 
 		</entity>
 		<entity
@@ -454,6 +458,8 @@
 			  i.ItemId AS ItemId,
 			  CONCAT(i.ItemId, s.StoryId) AS TranscriptionId,
 			  i.Title AS Title,
+			  DATE_FORMAT(i.DateStart, '%Y-%m-%dT%TZ') AS StartDate,
+			  DATE_FORMAT(i.DateEnd, '%Y-%m-%dT%TZ') AS EndDate,
 			  s.StoryId AS StoryId,
 			  s.`dc:title` AS StoryTitle,
 			  s.`edm:dataProvider` AS Institution,
@@ -550,6 +556,8 @@
 		  <field column="Categories" name="Categories" splitBy="#~#" />
 		  <field column="Dataset" name="Dataset" />
 		  <field column="Country" name="Country" />
+		  <field column="StartDate" name="StartDate" />
+		  <field column="EndDate" name="EndDate" />
 		  <field column="Timestamp" name="Timestamp" />
 		  <field column="LastUpdated" name="LastUpdated" />
 		  <field column="PreviewImageLink" name="PreviewImageLink" />

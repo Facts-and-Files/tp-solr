@@ -25,6 +25,10 @@
     <field name="Type" type="string" indexed="true" stored="true" multiValued="false" />
     <field name="Public" type="bool" indexed="true" stored="true" multiValued="false" />
 
+    <!-- Temp field for date conversion -->
+    <field name="TempStartDate" type="string" indexed="false" stored="false" multiValued="true" />
+    <field name="TempEndDate" type="string" indexed="false" stored="false" multiValued="true" />
+
     <!-- Text field, default field to run querries on -->
     <field name="text" type="text_field" indexed="true" stored="false" multiValued="true" />
 
@@ -78,6 +82,8 @@
   <copyField source="Categories" dest="text" />
   <copyField source="PlaceName" dest="text" />
   <copyField source="Title" dest="text" />
+  <copyField source="TempStartDate" dest="StartDate" />
+  <copyField source="TempEndDate" dest="EndDate" />
 
   <types>
     <fieldType name="string" class="solr.StrField" />
