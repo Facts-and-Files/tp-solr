@@ -1212,22 +1212,48 @@
     <processor class="solr.RegexReplaceProcessorFactory">
       <str name="fieldName">TempStartDate</str>
       <str name="fieldName">TempEndDate</str>
-      <str name="pattern">.*?(\d{4}).*?</str>
+      <str name="pattern">(?:^|\D)(\d{4})(?=\D|$)</str>
       <str name="replacement">$1</str>
       <bool name="literalReplacement">false</bool>
     </processor>
-    <processor class="solr.MinFieldValueUpdateProcessorFactory">
+    <processor class="solr.RegexReplaceProcessorFactory">
+      <str name="fieldName">TempStartDate</str>
+      <str name="fieldName">TempEndDate</str>
+      <str name="pattern">(.*\D|^)(\d{4})(?=\D|$)(.*)</str>
+      <str name="replacement">$2</str>
+      <bool name="literalReplacement">false</bool>
+    </processor>
+    <processor class="solr.RegexReplaceProcessorFactory">
+      <str name="fieldName">TempStartDate</str>
+      <str name="fieldName">TempEndDate</str>
+      <str name="pattern">(?:^\s\p{Z})(\d{4})\b</str>
+      <str name="replacement">$1</str>
+      <bool name="literalReplacement">false</bool>
+    </processor>
+    <processor class="solr.FirstFieldValueUpdateProcessorFactory">
+      <str name="fieldName">TempStartDate</str>
+      <str name="fieldName">TempEndDate</str>
+    </processor>
+    <!-- <processor class="solr.MinFieldValueUpdateProcessorFactory">
       <str name="fieldName">TempStartDate</str>
     </processor>
     <processor class="solr.MaxFieldValueUpdateProcessorFactory">
       <str name="fieldName">TempEndDate</str>
-    </processor>
+    </processor> -->
     <processor class="solr.ParseDateFieldUpdateProcessorFactory">
       <str name="fieldName">TempStartDate</str>
       <str name="fieldName">TempEndDate</str>
       <arr name="format">
         <str>yyyy</str>
         <str>yyyy-MM-dd</str>
+        <str>EEE MMM dd HH:mm:ss 'CET' yyyy</str>
+        <str>EEE MMM dd HH:mm:ss 'CET'yyyy</str>
+        <str>EEE MMM dd HH:mm:ss 'UTC' yyyy</str>
+        <str>EEE MMM dd HH:mm:ss z yyyy</str>
+        <str>dd MM yyyy</str>
+        <str>dd MMyyyy</str>
+        <str>yyyy-MM</str>
+        <str>MMMMyyyy</str>
       </arr>
     </processor>
     <processor class="solr.RunUpdateProcessorFactory" />
