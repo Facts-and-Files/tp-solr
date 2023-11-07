@@ -123,6 +123,7 @@
 			    i.ItemId AS ItemId,
 			    DATE_FORMAT(i.DateStart, '%Y-%m-%dT00:00:00Z') AS StartDate,
 			    DATE_FORMAT(i.DateEnd, '%Y-%m-%dT23:59:59Z') AS EndDate,
+				COALESCE(DATE_FORMAT(i.DateStart, '%Y-%m-%dT%TZ'), DATE_FORMAT(i.DateEnd, '%Y-%m-%dT%TZ')) AS TempFacetDate,
 		        s.StoryId AS StoryId,
 			    s.ProjectId AS ProjectId,
 			    s.`dc:title` AS StoryTitle,
@@ -258,6 +259,7 @@
 			<field column="StoryId" name="StoryId" />
 			<field column="StartDate" name="StartDate" />
 			<field column="EndDate" name="EndDate" />
+			<field column="TempFacetDate" name="TempFacetDate" />
 			<field column="Timestamp" name="Timestamp" />
 			<field column="LastUpdated" name="LastUpdated" />
 			<field column="ProjectId" name="ProjectId" />
@@ -310,8 +312,9 @@
 				d.Name AS Dataset,
 				s.`edm:country` AS edmCountry,
 				s.`edm:provider` AS edmProvider,
-				COALESCE(s.`edm:begin`,s.`edm:year`) AS StartDate,
-				s.`edm:end` AS EndDate,
+				COALESCE(s.`edm:begin`,s.`edm:year`) AS TempStartDate,
+				s.`edm:end` AS TempEndDate,
+				COALESCE(s.`edm:year`, COALESCE(s.`edm:begin`, s.`edm:end`)) AS TempFacetDate,
 				l.NameEnglish AS edmLanguage,
 				s.`dc:language` AS dcLanguage,
 				CASE
@@ -444,8 +447,9 @@
 			<field column="Timestamp" name="Timestamp" />
 			<field column="LastUpdated" name="LastUpdated" />
 			<field column="Public" name="Public" />
-			<field column="StartDate" name="TempStartDate" splitBy=" \|\| " />
-			<field column="EndDate" name="TempEndDate" splitBy=" \|\| " />
+			<field column="TempStartDate" name="TempStartDate" splitBy=" \|\| " />
+			<field column="TempEndDate" name="TempEndDate" splitBy=" \|\| " />
+			<field column="TempFacetDate" name="TempFacetDate" splitBy=" \|\| " />
 
 		</entity>
 		<entity
@@ -460,6 +464,7 @@
 			  i.Title AS Title,
 			  DATE_FORMAT(i.DateStart, '%Y-%m-%dT%TZ') AS StartDate,
 			  DATE_FORMAT(i.DateEnd, '%Y-%m-%dT%TZ') AS EndDate,
+			  COALESCE(DATE_FORMAT(i.DateEnd, '%Y-%m-%dT%TZ'), DATE_FORMAT(i.DateStart, '%Y-%m-%dT%TZ')) AS TempFacetDate,
 			  s.StoryId AS StoryId,
 			  s.`dc:title` AS StoryTitle,
 			  s.`edm:dataProvider` AS Institution,
@@ -558,6 +563,7 @@
 		  <field column="Country" name="Country" />
 		  <field column="StartDate" name="StartDate" />
 		  <field column="EndDate" name="EndDate" />
+		  <field column="TempFacetDate" name="TempFacetDate" />
 		  <field column="Timestamp" name="Timestamp" />
 		  <field column="LastUpdated" name="LastUpdated" />
 		  <field column="PreviewImageLink" name="PreviewImageLink" />

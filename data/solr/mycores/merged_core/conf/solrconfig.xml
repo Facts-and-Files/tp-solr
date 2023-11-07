@@ -1212,6 +1212,7 @@
     <processor class="solr.RegexReplaceProcessorFactory">
       <str name="fieldName">TempStartDate</str>
       <str name="fieldName">TempEndDate</str>
+      <str name="fieldName">TempFacetDate</str>
       <str name="pattern">(?:^|\D)(\d{4})(?=\D|$)</str>
       <str name="replacement">$1</str>
       <bool name="literalReplacement">false</bool>
@@ -1219,6 +1220,7 @@
     <processor class="solr.RegexReplaceProcessorFactory">
       <str name="fieldName">TempStartDate</str>
       <str name="fieldName">TempEndDate</str>
+      <str name="fieldName">TempFacetDate</str>
       <str name="pattern">(.*\D|^)(\d{4})(?=\D|$)(.*)</str>
       <str name="replacement">$2</str>
       <bool name="literalReplacement">false</bool>
@@ -1226,6 +1228,7 @@
     <processor class="solr.RegexReplaceProcessorFactory">
       <str name="fieldName">TempStartDate</str>
       <str name="fieldName">TempEndDate</str>
+      <str name="fieldName">TempFacetDate</str>
       <str name="pattern">(?:^\s\p{Z})(\d{4})\b</str>
       <str name="replacement">$1</str>
       <bool name="literalReplacement">false</bool>
@@ -1233,6 +1236,7 @@
     <processor class="solr.FirstFieldValueUpdateProcessorFactory">
       <str name="fieldName">TempStartDate</str>
       <str name="fieldName">TempEndDate</str>
+      <str name="fieldName">TempFacetDate</str>
     </processor>
     <!-- <processor class="solr.MinFieldValueUpdateProcessorFactory">
       <str name="fieldName">TempStartDate</str>
@@ -1243,6 +1247,7 @@
     <processor class="solr.ParseDateFieldUpdateProcessorFactory">
       <str name="fieldName">TempStartDate</str>
       <str name="fieldName">TempEndDate</str>
+      <str name="fieldName">TempFacetDate</str>
       <arr name="format">
         <str>yyyy</str>
         <str>yyyy-MM-dd</str>
