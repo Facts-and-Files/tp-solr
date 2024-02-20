@@ -106,7 +106,7 @@
 				FROM
 				  item_htr_transcription_view
 				GROUP BY ItemId
-			  ) htrTranscriptionView ON htrTranscriptionView.ItemId = i.Item.Id AND i.TranscriptionSource != 'manual'
+			  ) htrTranscriptionView ON htrTranscriptionView.ItemId = i.ItemId AND i.TranscriptionSource != 'manual'
 			  LEFT JOIN
 			    CompletionStatus coStatus ON i.CompletionStatusId = coStatus.CompletionStatusId
 			  LEFT JOIN
@@ -123,13 +123,16 @@
 			    i.ItemId AS ItemId,
 			    DATE_FORMAT(i.DateStart, '%Y-%m-%dT00:00:00Z') AS StartDate,
 			    DATE_FORMAT(i.DateEnd, '%Y-%m-%dT23:59:59Z') AS EndDate,
+				COALESCE(DATE_FORMAT(i.DateStart, '%Y-%m-%dT%TZ'), DATE_FORMAT(i.DateEnd, '%Y-%m-%dT%TZ')) AS TempFacetDate,
 		        s.StoryId AS StoryId,
 			    s.ProjectId AS ProjectId,
 			    s.`dc:title` AS StoryTitle,
 				s.`edm:dataProvider` AS Institution,
 				s.`edm:country` AS Country,
+				s.Public AS Public,
 				d.Name AS Dataset,
 			    DATE_FORMAT(i.Timestamp, '%Y-%m-%dT%TZ') AS Timestamp,
+				DATE_FORMAT(i.LastUpdated, '%Y-%m-%dT%TZ') AS LastUpdated,
 			    i.Title AS Title,
 				'Item' AS Type,
 			    i.Description AS Description,
@@ -256,7 +259,9 @@
 			<field column="StoryId" name="StoryId" />
 			<field column="StartDate" name="StartDate" />
 			<field column="EndDate" name="EndDate" />
+			<field column="TempFacetDate" name="TempFacetDate" />
 			<field column="Timestamp" name="Timestamp" />
+			<field column="LastUpdated" name="LastUpdated" />
 			<field column="ProjectId" name="ProjectId" />
 			<field column="StoryTitle" name="StoryTitle" />
 			<field column="Title" name="Title" />
@@ -292,6 +297,7 @@
 			<field column="Dataset" name="Dataset" />
 			<field column="Institution" name="Institution" />
 			<field column="Country" name="Country" />
+			<field column="Public" name="Public" />
 			<field column="Type" name="Type" transformer="DefaultValueTransformer" template="Item"  />
 
 		</entity>
@@ -306,6 +312,9 @@
 				d.Name AS Dataset,
 				s.`edm:country` AS edmCountry,
 				s.`edm:provider` AS edmProvider,
+				COALESCE(s.`edm:begin`,s.`edm:year`) AS TempStartDate,
+				s.`edm:end` AS TempEndDate,
+				COALESCE(s.`edm:year`, COALESCE(s.`edm:begin`, s.`edm:end`)) AS TempFacetDate,
 				l.NameEnglish AS edmLanguage,
 				s.`dc:language` AS dcLanguage,
 				CASE
@@ -316,7 +325,10 @@
 				s.`dc:title` AS dcTitle,
 				'Story' AS Type,
 				s.`dc:description` AS dcDescription,
-				s.PlaceName as PlaceName,
+				s.PlaceName AS PlaceName,
+				DATE_FORMAT(s.Timestamp, '%Y-%m-%dT%TZ') AS Timestamp,
+				DATE_FORMAT(s.LastUpdated, '%Y-%m-%dT%TZ') AS LastUpdated,
+				s.Public AS Public,
 				CONCAT(s.PlaceLatitude, ',', s.PlaceLongitude) AS Coordinates,
 				s.`edm:dataProvider` AS Institution,
 				img.ImageLink AS PreviewImageLink,
@@ -407,7 +419,7 @@
 			  ORDER BY
 			    s.StoryId DESC;
 			"
-			deltaQuery="SELECT StoryId FROM Story WHERE LastUpdated > '${dih.delta.last_index_time}'"
+			deltaQuery="SELECT StoryId FROM Story WHERE LastUpdated > '${dih.last_index_time}'"
 			pk="StoryId"
 		>
 		    <field column="StoryId" name="docId" />
@@ -432,6 +444,12 @@
 			<field column="Coordinates" name="PlaceCoordinates" />
 			<field column="Institution" name="Institution" />
 			<field column="Type" name="Type" />
+			<field column="Timestamp" name="Timestamp" />
+			<field column="LastUpdated" name="LastUpdated" />
+			<field column="Public" name="Public" />
+			<field column="TempStartDate" name="TempStartDate" splitBy=" \|\| " />
+			<field column="TempEndDate" name="TempEndDate" splitBy=" \|\| " />
+			<field column="TempFacetDate" name="TempFacetDate" splitBy=" \|\| " />
 
 		</entity>
 		<entity
@@ -444,11 +462,17 @@
 			  i.ItemId AS ItemId,
 			  CONCAT(i.ItemId, s.StoryId) AS TranscriptionId,
 			  i.Title AS Title,
+			  DATE_FORMAT(i.DateStart, '%Y-%m-%dT%TZ') AS StartDate,
+			  DATE_FORMAT(i.DateEnd, '%Y-%m-%dT%TZ') AS EndDate,
+			  COALESCE(DATE_FORMAT(i.DateEnd, '%Y-%m-%dT%TZ'), DATE_FORMAT(i.DateStart, '%Y-%m-%dT%TZ')) AS TempFacetDate,
 			  s.StoryId AS StoryId,
 			  s.`dc:title` AS StoryTitle,
 			  s.`edm:dataProvider` AS Institution,
 			  s.`edm:country` AS Country,
+			  s.Public AS Public,
+			  d.Name AS Dataset,
 			  DATE_FORMAT(tr.Timestamp, '%Y-%m-%dT%TZ' ) AS Timestamp,
+			  DATE_FORMAT(tr.LastUpdated, '%Y-%m-%dT%TZ') AS LastUpdated,
 			  i.ImageLink AS PreviewImageLink,
 			  i.TranscriptionSource AS TranscriptionSource,
 			  tr.TranscriptionText AS TranscriptionText,
@@ -468,7 +492,8 @@
 			  SELECT
 			    ItemId,
 				ANY_VALUE(TextNoTags) AS TranscriptionText,
-				DATE_FORMAT(Timestamp, '%Y-%m-%dT%TZ') AS Timestamp
+				DATE_FORMAT(Timestamp, '%Y-%m-%dT%TZ') AS Timestamp,
+				DATE_FORMAT(Timestamp, '%Y-%m-%dT%TZ') AS LastUpdated
 			  FROM
 			    Transcription
 			  WHERE
@@ -515,7 +540,15 @@
 			  CompletionStatus trStatus ON i.TranscriptionStatusId = trStatus.CompletionStatusId
 			WHERE i.TranscriptionStatusId != 1 AND i.ItemId = '${dih.delta.ItemId}';
 		  "
-		  deltaQuery="SELECT ItemId FROM Item WHERE LastUpdated > '${dih.last_index_time}'"
+		  deltaQuery="SELECT ItemId 
+		    FROM Item i
+			WHERE EXISTS (
+				SELECT 1
+				FROM Transcription t
+				WHERE t.ItemId = i.ItemId
+				AND t.CurrentVersion = 1
+				AND t.Timestamp > '${dih.last_index_time}'
+			)"
 		  pk="ItemId"
 		>
 		  
@@ -528,7 +561,11 @@
 		  <field column="Categories" name="Categories" splitBy="#~#" />
 		  <field column="Dataset" name="Dataset" />
 		  <field column="Country" name="Country" />
+		  <field column="StartDate" name="StartDate" />
+		  <field column="EndDate" name="EndDate" />
+		  <field column="TempFacetDate" name="TempFacetDate" />
 		  <field column="Timestamp" name="Timestamp" />
+		  <field column="LastUpdated" name="LastUpdated" />
 		  <field column="PreviewImageLink" name="PreviewImageLink" />
 		  <field column="TranscriptionSource" name="TranscriptionSource" />
 		  <field column="TranscriptionText" name="TranscriptionText" />
@@ -539,6 +576,8 @@
 		  <field column="TranscriptionColorCode" name="TranscriptionStatusColorCode" />
 		  <field column="TranscriptionColorCodeGradient" name="TranscriptionStatusColorCodeGradient" />
 		  <field column="TranscriptionStatusName" name="CompletionStatusName" />
+		  <field column="Public" name="Public" />
+		  <field column="Dataset" name="Dataset" />
 
 		</entity>
 	</document>

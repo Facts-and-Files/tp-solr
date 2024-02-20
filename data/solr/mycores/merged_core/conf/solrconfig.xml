@@ -684,6 +684,7 @@
     <requestHandler name="/dataimport" class="org.apache.solr.handler.dataimport.DataImportHandler">
       <lst name="defaults">
         <str name="config">DIHconfigfile.xml</str>
+        <str name="update.chain">extractDate</str>
         <lst name="datasource">
           <str name="type">${dbtype}</str>
           <str name="driver">${dbdriver}</str>
@@ -1207,6 +1208,61 @@
     </lst>
   </updateProcessor>
   -->
+  <updateRequestProcessorChain name="extractDate">
+    <processor class="solr.RegexReplaceProcessorFactory">
+      <str name="fieldName">TempStartDate</str>
+      <str name="fieldName">TempEndDate</str>
+      <str name="fieldName">TempFacetDate</str>
+      <str name="pattern">(?:^|\D)(\d{4})(?=\D|$)</str>
+      <str name="replacement">$1</str>
+      <bool name="literalReplacement">false</bool>
+    </processor>
+    <processor class="solr.RegexReplaceProcessorFactory">
+      <str name="fieldName">TempStartDate</str>
+      <str name="fieldName">TempEndDate</str>
+      <str name="fieldName">TempFacetDate</str>
+      <str name="pattern">(.*\D|^)(\d{4})(?=\D|$)(.*)</str>
+      <str name="replacement">$2</str>
+      <bool name="literalReplacement">false</bool>
+    </processor>
+    <processor class="solr.RegexReplaceProcessorFactory">
+      <str name="fieldName">TempStartDate</str>
+      <str name="fieldName">TempEndDate</str>
+      <str name="fieldName">TempFacetDate</str>
+      <str name="pattern">(?:^\s\p{Z})(\d{4})\b</str>
+      <str name="replacement">$1</str>
+      <bool name="literalReplacement">false</bool>
+    </processor>
+    <processor class="solr.FirstFieldValueUpdateProcessorFactory">
+      <str name="fieldName">TempStartDate</str>
+      <str name="fieldName">TempEndDate</str>
+      <str name="fieldName">TempFacetDate</str>
+    </processor>
+    <!-- <processor class="solr.MinFieldValueUpdateProcessorFactory">
+      <str name="fieldName">TempStartDate</str>
+    </processor>
+    <processor class="solr.MaxFieldValueUpdateProcessorFactory">
+      <str name="fieldName">TempEndDate</str>
+    </processor> -->
+    <processor class="solr.ParseDateFieldUpdateProcessorFactory">
+      <str name="fieldName">TempStartDate</str>
+      <str name="fieldName">TempEndDate</str>
+      <str name="fieldName">TempFacetDate</str>
+      <arr name="format">
+        <str>yyyy</str>
+        <str>yyyy-MM-dd</str>
+        <str>EEE MMM dd HH:mm:ss 'CET' yyyy</str>
+        <str>EEE MMM dd HH:mm:ss 'CET'yyyy</str>
+        <str>EEE MMM dd HH:mm:ss 'UTC' yyyy</str>
+        <str>EEE MMM dd HH:mm:ss z yyyy</str>
+        <str>dd MM yyyy</str>
+        <str>dd MMyyyy</str>
+        <str>yyyy-MM</str>
+        <str>MMMMyyyy</str>
+      </arr>
+    </processor>
+    <processor class="solr.RunUpdateProcessorFactory" />
+  </updateRequestProcessorChain>
 
   <!-- The update.autoCreateFields property can be turned to false to disable schemaless mode -->
   <!--<updateRequestProcessorChain name="add-unknown-fields-to-the-schema" default="${update.autoCreateFields:true}"

@@ -8,7 +8,9 @@
     <field name="StoryId" type="string" indexed="true" stored="true" multiValued="false" />
     <field name="StartDate" type="date_field" indexed="true" stored="true" docValues="true" multiValued="false" />
     <field name="EndDate" type="date_field" indexed="true" stored="true" docValues="true" multiValued="false" />
+    <field name="FacetDate" type="date_field" indexed="true" stored="true" docValues="true" multiValued="false" />
     <field name="Timestamp" type="date_field" indexed="true" stored="true" docValues="true" multiValued="false" />
+    <field name="LastUpdated" type="date_field" indexed="true" stored="true" docValues="true" multiValued="false" />
     <field name="ProjectId" type="string" indexed="true" stored="true" multiValued="false" />
     <field name="StoryTitle" type="transcription_field" indexed="true" stored="true" multiValued="false" />
     <field name="Title" type="transcription_field" indexed="true" stored="true" multiValued="false" />
@@ -22,6 +24,12 @@
     <field name="CompletionStatusColorCodeGradient" type="string" indexed="true" stored="true" multiValued="false" />
     <field name="Institution" type="string" indexed="true" stored="true" multiValued="false" />
     <field name="Type" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="Public" type="bool" indexed="true" stored="true" multiValued="false" />
+
+    <!-- Temp field for date conversion -->
+    <field name="TempStartDate" type="string" indexed="false" stored="false" multiValued="true" />
+    <field name="TempEndDate" type="string" indexed="false" stored="false" multiValued="true" />
+    <field name="TempFacetDate" type="string" indexed="false" stored="false" multiValued="true" />
 
     <!-- Text field, default field to run querries on -->
     <field name="text" type="text_field" indexed="true" stored="false" multiValued="true" />
@@ -76,11 +84,15 @@
   <copyField source="Categories" dest="text" />
   <copyField source="PlaceName" dest="text" />
   <copyField source="Title" dest="text" />
+  <copyField source="TempStartDate" dest="StartDate" />
+  <copyField source="TempEndDate" dest="EndDate" />
+  <copyField source="TempFacetDate" dest="FacetDate" />
 
   <types>
     <fieldType name="string" class="solr.StrField" />
     <fieldType name="long" class="solr.LongPointField" />
     <fieldType name="date_field" class="solr.DatePointField" />
+    <fieldType name="bool" class="solr.BoolField" />
 
     <fieldType name="transcription_field" class="solr.TextField" >
       <analyzer>
