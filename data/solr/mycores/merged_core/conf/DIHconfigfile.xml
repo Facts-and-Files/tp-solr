@@ -12,6 +12,7 @@
 			    DATE_FORMAT(i.DateEnd, '%Y-%m-%dT23:59:59Z') AS EndDate,
 			    s.ProjectId AS ProjectId,
 			    s.`dc:title` AS StoryTitle,
+				s.Public AS Public,
 			    DATE_FORMAT(i.Timestamp, '%Y-%m-%dT%TZ') AS Timestamp,
 			    i.Title AS Title,
 			    i.Description AS Description,
@@ -470,6 +471,7 @@
 			  s.`edm:dataProvider` AS Institution,
 			  s.`edm:country` AS Country,
 			  s.Public AS Public,
+			  s.ProjectId AS ProjectId,
 			  d.Name AS Dataset,
 			  DATE_FORMAT(tr.Timestamp, '%Y-%m-%dT%TZ' ) AS Timestamp,
 			  DATE_FORMAT(tr.LastUpdated, '%Y-%m-%dT%TZ') AS LastUpdated,
@@ -577,6 +579,7 @@
 		  <field column="TranscriptionColorCodeGradient" name="TranscriptionStatusColorCodeGradient" />
 		  <field column="TranscriptionStatusName" name="CompletionStatusName" />
 		  <field column="Public" name="Public" />
+		  <field column="ProjectId" name="ProjectId" />
 		  <field column="Dataset" name="Dataset" />
 
 		</entity>
