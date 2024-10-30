@@ -1,17 +1,19 @@
+.PHONY: serve stop help
+
 # include .env
 # export $(shell sed 's/=.*//' .env)
 
-this_container := $(shell pwd)
-api_db_container := ../tp-mysql
-db_manager_container := ../tp-mysql-manager
+PWD := $(shell pwd)
+TP_API_DB := ../tp-mysql
+DB_MANAGER := ../tp-mysql-manager
 
-docker_start:
+serve:
 	@echo "Starting database container..."
-	@cd $(api_db_container) && sudo docker-compose up -d
+	@cd $(TP_API_DB) && sudo docker compose up --detach
 	@echo "Starting SOLR..."
-	@cd $(this_container) && sudo docker-compose up -d
+	@cd $(PWD) && sudo docker compose up --detach
 	@echo "Starting Adminer..."
-	@cd $(db_manager_container) && sudo docker-compose up -d
+	@cd $(DB_MANAGER) && sudo docker compose up --detach
 	@echo
 	@echo "Database running on tp_mysql:3306"
 	@echo "SOLR running on http://localhost:8983"
@@ -20,12 +22,27 @@ docker_start:
 	@echo "I'm up to no good..."
 	@echo
 
-docker_stop:
+stop:
 	@echo
 	@echo "Stopping all containers..."
-	@cd $(db_manager_container) && sudo docker-compose down
-	@cd $(this_container) && sudo docker-compose down
-	@cd $(api_db_container) && sudo docker-compose down
+	@cd $(DB_MANAGER) && sudo docker compose down
+	@cd $(PWD) && sudo docker compose down
+	@cd $(TP_API_DB) && sudo docker compose down
 	@echo
 	@echo "...mischief managed."
 	@echo
+
+help:
+	@echo "Manage project"
+	@echo ""
+	@echo "Usage:"
+	@echo "  $$ make [command]"
+	@echo ""
+	@echo "Commands:"
+	@echo ""
+	@echo "  $$ make serve"
+	@echo "  Starting the servers"
+	@echo ""
+	@echo "  $$ make stop"
+	@echo "  Stopping the servers"
+	@echo ""
